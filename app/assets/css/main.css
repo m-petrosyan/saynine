@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+    /* Font sizes */
+    --text-title: 48px;
+    --text-subtitle: 60px;
+    --text-3xl: 34px;
+    --text-2xl: 30px;
+    --text-xl: 26px;
+    --text-lg: 24px;
+    --text-md: 22px;
+    --text-base: 16px;
+    --text-sm: 14px;
+
+    /* Colors */
+    --color-blue: #077cfd;
+    --color-blue-light: #E5F1FF;
+    --color-green: #B5DE44;
+    --color-green-dark: #435A02;
+    --color-white-transparent: #C6E1FF;
+
+
+    /* Breakpoints */
+    --breakpoint-sm: 390px;
+    --breakpoint-md: 744px;
+    --breakpoint-xl: 1920px;
+
+    /* Width */
+    --max-width-container: 1640px;
+
+
+    /* Fonts */
+    --font-sans: 'LeagueSpartan', sans-serif;
+
+
+    --font-weight-light: 400;
+    --font-weight-normal: 500;
+    --font-weight-medium: 600;
+    --font-weight-bold: 700;
+
+    /* border */
+    --radius-lg: 50px;
+}
+
+@font-face {
+    font-family: 'LeagueSpartan';
+    src: url('../fonts/LeagueSpartan-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@layer base {
+    html {
+        font-family: theme('fontFamily.sans');
+    }
+}
