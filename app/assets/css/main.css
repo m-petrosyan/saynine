@@ -9,6 +9,7 @@
     --text-xl: 26px;
     --text-lg: 24px;
     --text-md: 22px;
+    --text-info: 19px;
     --text-base: 16px;
     --text-sm: 14px;
 
@@ -18,6 +19,7 @@
     --color-green: #B5DE44;
     --color-green-dark: #435A02;
     --color-white-transparent: #C6E1FF;
+    --color-gray: #B9C0D4;
 
 
     /* Breakpoints */

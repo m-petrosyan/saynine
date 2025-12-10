@@ -9,7 +9,9 @@
         <h2 class="text-xl sm:text-title font-bold">Link building report</h2>
         <p class="sm:text-lg text-white-transparent">June, 2025</p>
       </div>
-      <IconsLogo/>
+      <NuxtLink to="/">
+        <IconsLogo/>
+      </NuxtLink>
     </div>
   </header>
 </template>

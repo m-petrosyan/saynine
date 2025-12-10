@@ -1,10 +1,11 @@
 <script setup>
-defineProps({
-  chartData: {
-    type: Array,
-    required: true
-  }
-})
+import ChartDoughnut from "@/components/icons/ChartDoughnut.vue";
+import ChartLine from "@/components/icons/ChartLine.vue";
+
+const chartData = ref([
+  {title: 'DR', from: 70, to: 82, percent: '15%', icon: ChartDoughnut},
+  {title: 'Traffic', from: '51.4K', to: '54.4K', percent: '5%', icon: ChartLine},
+])
 </script>
 
 <template>
@@ -14,14 +15,13 @@ defineProps({
       <div class="flex gap-2 items-center font-bold">
         <component :is="chart.icon"/>
         <p class="font-medium">{{ chart.title }}</p>
-        <p>{{ chart.from }}</p>
+        <p class="text-xl">{{ chart.from }}</p>
         <IconsArrow/>
-        <p>{{ chart.to }}</p>
+        <p class="text-xl">{{ chart.to }}</p>
       </div>
-      <div class="bg-green text-green-dark rounded-lg flex items-center gap-1 px-2 py-1">
+      <ElementsRankInfo :percent="chart.percent">
         <IconsArrowBolder/>
-        <p class="font-medium">{{ chart.prcent }}%</p>
-      </div>
+      </ElementsRankInfo>
     </div>
   </div>
 </template>
