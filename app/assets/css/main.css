@@ -1,3 +1,4 @@
+@import "./fonts.css";
 @import "tailwindcss";
 
 @theme {
@@ -15,12 +16,14 @@
 
     /* Colors */
     --color-blue: #077cfd;
-    --color-blue-light: #E5F1FF;
     --color-green: #B5DE44;
     --color-green-dark: #435A02;
-    --color-white-transparent: #C6E1FF;
+    --color-white-blue-light: #F6FAFF;
+    --color-white-blue: #E5F1FF;
+    --color-white-blue-dark: #C6E1FF;
     --color-gray: #B9C0D4;
-
+    --color-gray-dark: #646E8C;
+    --color-base: #30374F;
 
     /* Breakpoints */
     --breakpoint-sm: 390px;
@@ -30,11 +33,10 @@
     /* Width */
     --max-width-container: 1640px;
 
-
     /* Fonts */
     --font-sans: 'LeagueSpartan', sans-serif;
 
-
+    /* font weight */
     --font-weight-light: 400;
     --font-weight-normal: 500;
     --font-weight-medium: 600;
@@ -44,15 +46,10 @@
     --radius-lg: 50px;
 }
 
-@font-face {
-    font-family: 'LeagueSpartan';
-    src: url('../fonts/LeagueSpartan-VariableFont_wght.ttf') format('truetype');
-    font-weight: 100 900;
-    font-display: swap;
-}
 
 @layer base {
     html {
-        font-family: theme('fontFamily.sans');
+        font-family: theme('fontFamily.sans'), serif;
+        color: theme('colors.base');
     }
 }

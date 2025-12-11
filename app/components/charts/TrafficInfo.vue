@@ -14,7 +14,7 @@ const trafficData = [
   <div class="w-3/12">
     <div v-for="(item,index) in trafficData" :key="item.title"
          class=" pb-4 mb-4"
-         :class="{'border-b-2 border-blue-light':index !== trafficData.length - 1 }">
+         :class="{'border-b-2 border-white-blue':index !== trafficData.length - 1 }">
       <div class="flex items-center gap-4">
         <component :is="item.icon"/>
         <h4 class="text-md font-bold">{{ item.title }}</h4>
