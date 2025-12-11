@@ -1,6 +1,6 @@
 <script setup>
 import Backlink from "@/assets/icons/backlink.svg";
-import Average from "@/assets/icons/arrow_blue.svg";
+import Average from "@/assets/icons/average.svg";
 import Domain from "@/assets/icons/domain.svg";
 import ElephantYellow from "@/assets/videos/elephant_yellow_tshirt.mp4";
 import ElephantYellowHover from "@/assets/videos/elephant_yellow_tshirt_hover.mp4";
@@ -13,7 +13,7 @@ const trafficData = [
 </script>
 
 <template>
-  <div class="w-3/12">
+  <div class="w-3/12 relative">
     <div v-for="(item,index) in trafficData" :key="item.title"
          class=" pb-4 mb-4"
          :class="{'border-b-2 border-white-blue':index !== trafficData.length - 1 }">

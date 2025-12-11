@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="mb-36">
+  <div>
     <h2 v-if="title" v-text="title" class="text-center text-subtitle font-bold mb-16"/>
     <div class="flex justify-between gap-x-20">
       <slot/>

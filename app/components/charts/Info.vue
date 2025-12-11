@@ -11,7 +11,7 @@ const chartData = [
 <template>
   <div class="flex gap-4">
     <div v-for="chart in chartData" :key="chart.title"
-         class="flex h-fit items-center border-2 rounded-xl p-2 border-white-blue gap-4 text-lg">
+         class="flex h-fit items-center border-2 rounded-xl py-2 px-3  border-white-blue gap-4 text-lg">
       <div class="flex gap-2 items-center font-bold">
         <img :src="chart.icon" :alt="chart.title"/>
         <p class="font-medium">{{ chart.title }}</p>

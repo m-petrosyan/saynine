@@ -4,7 +4,7 @@ import ElephantFootballHover from '@/assets/videos/elephant_football_hover.mp4'
 </script>
 
 <template>
-  <div ref="containerRef" class="flex items-center justify-end py-30">
+  <div class="relative max-w-[1980px] mx-auto flex gap-x-10 items-center justify-end py-34">
     <div>
       <h2 class="text-white text-6xl font-bold">Thank you</h2>
       <NuxtLink to="/" class="flex gap-x-4 bg-white rounded-lg block w-fit px-6 py-3 mt-10">
@@ -14,7 +14,7 @@ import ElephantFootballHover from '@/assets/videos/elephant_football_hover.mp4'
         </div>
       </NuxtLink>
     </div>
-    <div class="w-8/12 flex items-center">
+    <div class="w-8/12 flex items-center ">
       <ElementsVideoHover :start="ElephantFootball" :hover="ElephantFootballHover"
                           class="ml-20  absolute right-0"/>
     </div>

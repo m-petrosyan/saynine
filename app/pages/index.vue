@@ -9,19 +9,19 @@ useHead({
 
 <template>
   <div>
-    <div class="flex items-center justify-between border-b-2 border-white-blue pb-10 mb-10">
+    <div class="flex items-center justify-between border-b-2 border-white-blue pb-10">
       <div>
         <img src="@/assets/icons/airfocus.svg" alt="airfocus">
       </div>
       <ChartsInfo/>
     </div>
-    <ChartsWrapper>
+    <ChartsWrapper class="mt-17">
       <ChartsTrafficInfo/>
     </ChartsWrapper>
-    <ChartsWrapper title="Ranking results by Ahrefs">
+    <ChartsWrapper title="Ranking results by Ahrefs" class="mt-40">
       <ChartsTegInfo/>
     </ChartsWrapper>
-    <BackLinksPerAnchor/>
+    <BackLinksPerAnchor class="mt-40"/>
     <BacklinksPerUrl class="mt-40"/>
     <CitationsWrapper class="mt-40"/>
   </div>
