@@ -1,16 +1,18 @@
 <script setup>
-const tegData = ref([
+const tegData = [
   {
     id: 1,
     name: 'product strategy',
     rank: 15,
+    growth: true
   },
   {
     id: 2,
     name: 'product strategy',
     rank: 13,
+    growth: true
   },
-])
+]
 
 const activeTeg = ref(1)
 </script>
@@ -19,17 +21,14 @@ const activeTeg = ref(1)
   <div class="flex flex-col gap-y-6 w-3/12">
     <div class="leading-10">
       <h4 class="text-xl font-bold">Keywords</h4>
-      <p class="text-info text-gray-dark">Select the keyword to see the info</p>
+      <p class="text-sm text-gray-500">Select the keyword to see the info</p>
     </div>
-    <div>
-      <div v-for="item in tegData" :key="item.id"
-           class="flex items-center justify-between p-4 rounded-lg mb-4"
-           :class="{ 'bg-blue-50': item.id === activeTeg}">
-        <p>product strategy</p>
-        <ElementsRankInfo :percent="item.rank">
-          <IconsArrowBolder/>
-        </ElementsRankInfo>
-      </div>
+    <div class="flex flex-col gap-y-4">
+      <ElementsRadioButton
+          v-for="item in tegData" :key="item.id"
+          :item="item"
+          :active="activeTeg"
+          v-model="activeTeg"/>
     </div>
   </div>
 </template>

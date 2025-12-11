@@ -6,10 +6,6 @@
         <NuxtPage/>
       </section>
     </main>
+    <Footer/>
   </div>
 </template>
-<style>
-
-</style>
-<script setup>
-</script>

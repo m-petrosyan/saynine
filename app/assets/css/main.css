@@ -3,6 +3,7 @@
 
 @theme {
     /* Font sizes */
+    --text-6xl: 72px;
     --text-title: 48px;
     --text-subtitle: 60px;
     --text-3xl: 34px;
@@ -16,6 +17,7 @@
 
     /* Colors */
     --color-blue: #077cfd;
+    --color-blue-light: #99CAFF;
     --color-green: #B5DE44;
     --color-green-dark: #435A02;
     --color-white-blue-light: #F6FAFF;
@@ -23,7 +25,10 @@
     --color-white-blue-dark: #C6E1FF;
     --color-gray: #B9C0D4;
     --color-gray-dark: #646E8C;
+    --color-gray-darker: #181F35;
     --color-base: #30374F;
+    --color-pink: #FECDCA;
+    --color-red: #912018;
 
     /* Breakpoints */
     --breakpoint-sm: 390px;
@@ -43,7 +48,7 @@
     --font-weight-bold: 700;
 
     /* border */
-    --radius-lg: 50px;
+    --radius-lg: 60px;
 }
 
 

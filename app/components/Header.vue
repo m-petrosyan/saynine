@@ -10,7 +10,7 @@
         <p class="sm:text-lg text-white-blue-dark">June, 2025</p>
       </div>
       <NuxtLink to="/">
-        <IconsLogo/>
+        <img src="@/assets/icons/logo.svg" alt="logo"/>
       </NuxtLink>
     </div>
   </header>
