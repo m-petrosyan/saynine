@@ -1,32 +1,6 @@
 <script setup>
-import Running from '@/assets/videos/football_elephant.mp4'
-import RunningEnd from '@/assets/videos/football_hover.mp4'
-
-const isHovered = ref(false)
-const containerRef = ref(null)
-const videoRef = ref(null)
-
-const videoSrc = computed(() => isHovered.value ? RunningEnd : Running)
-
-const {stop} = useIntersectionObserver(
-    containerRef,
-    ([{isIntersecting}]) => {
-      if (isIntersecting) {
-        console.log('play')
-        videoRef.value?.play()
-      } else {
-        videoRef.value?.pause()
-      }
-    },
-    {threshold: 0.5}
-)
-
-watch(videoSrc, () => {
-  videoRef.value?.load()
-  videoRef.value?.play()
-})
-
-onUnmounted(() => stop())
+import ElephantFootball from '@/assets/videos/elephant_football.mp4'
+import ElephantFootballHover from '@/assets/videos/elephant_football_hover.mp4'
 </script>
 
 <template>
@@ -40,11 +14,9 @@ onUnmounted(() => stop())
         </div>
       </NuxtLink>
     </div>
-    <div @mouseenter="isHovered = true" @mouseleave="isHovered = false"
-         class="h-[227px] w-9/12">
-      <video ref="videoRef" muted loop class="w-full h-auto">
-        <source :src="videoSrc" type="video/mp4"/>
-      </video>
+    <div class="w-8/12 flex items-center">
+      <ElementsVideoHover :start="ElephantFootball" :hover="ElephantFootballHover"
+                          class="ml-20  absolute right-0"/>
     </div>
   </div>
 </template>

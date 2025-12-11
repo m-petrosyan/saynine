@@ -1,4 +1,7 @@
 <script setup>
+import BacklinksPerUrl from "~/components/charts/BacklinksPerUrl.vue";
+import BackLinksPerAnchor from "~/components/charts/BackLinksPerAnchor.vue";
+
 useHead({
   title: "Saynine"
 })
@@ -18,8 +21,8 @@ useHead({
     <ChartsWrapper title="Ranking results by Ahrefs">
       <ChartsTegInfo/>
     </ChartsWrapper>
-    <ChartsNumber title="Number of backlinks per anchor text"/>
-    <ChartsNumber title="Number of backlinks per URL" class="mt-40"/>
+    <BackLinksPerAnchor/>
+    <BacklinksPerUrl class="mt-40"/>
     <CitationsWrapper class="mt-40"/>
   </div>
 </template>
