@@ -10,7 +10,11 @@ const props = defineProps({
   }
 })
 
-defineEmits(['toggle-dataset'])
+const emit = defineEmits(['toggle-dataset'])
+
+const setActive = (index) => {
+  emit('toggle-dataset', index)
+}
 </script>
 
 <template>
@@ -18,16 +22,11 @@ defineEmits(['toggle-dataset'])
     <button
         v-for="(dataset, index) in props.datasets"
         :key="index"
-        @click="$emit('toggle-dataset', index)"
-        :class="[
-        'flex flex-1 items-center py-3 gap-2 px-3 rounded-lg  cursor-pointer transition-colors',
-          props.activeDatasets[index]
-            ? `border-${dataset.color === '#3b82f6' ? 'blue-500 text-blue-700 bg-blue-50' : 'cyan-500 text-cyan-700 bg-cyan-50'}`
-            : 'border-slate-200 text-slate-600 hover:border-slate-300'
-        ]"
-    >
+        @click="setActive(index)"
+        class="flex flex-1 items-center py-3 gap-2 px-3 rounded-lg  cursor-pointer transition-colors bg-white-blue-light">
       <span
-          :class="[`w-4 h-4 rounded-full`, dataset.color === '#3b82f6' ? 'bg-blue' : 'bg-cyan-400']">
+          class="rounded-full w-5 h-5  "
+          :style="props.activeDatasets[index] ?  { backgroundColor: dataset.color } : 'border: 2px solid gray'">
       </span>
       <span>{{ dataset.name }}</span>
     </button>

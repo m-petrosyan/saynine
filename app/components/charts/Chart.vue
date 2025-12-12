@@ -19,35 +19,85 @@ const options = [
   {label: 'Custom range', value: 'custom'}
 ]
 
+const fullLabels = [
+  '29 Jun 2023',
+  '11 Oct 2023',
+  '23 Jan 2024',
+  '6 May 2024',
+  '18 Aug 2024',
+  '30 Nov 2024',
+  '14 Mar 2025',
+  '26 Jun 2025'
+]
+
+const fullData1 = [39, 40, 42, 45, 48, 46, 49, 52] // Domain Rating
+const fullData2 = [2115, 2200, 2400, 2800, 3200, 3400, 3600, 3850] // Organic traffic
 
 const chartConfig = ref({
-  labels: [
-    '29 Jun 2023',
-    '11 Oct 2023',
-    '23 Jan 2024',
-    '6 May 2024',
-    '18 Aug 2024',
-    '30 Nov 2024',
-    '14 Mar 2025',
-    '26 Jun 2025'
-  ],
+  labels: fullLabels.slice(-8), // default last 2 days
   datasets: [
     {
       name: 'Domain Rating',
-      data: [39, 40, 42, 45, 48, 46, 49, 52],
+      data: fullData1.slice(-8),
       color: '#3b82f6',
       bgAlpha: 'rgba(59, 130, 246, 0.15)',
       yAxisID: 'y'
     },
     {
       name: 'Organic traffic',
-      data: [2115, 2200, 2400, 2800, 3200, 3400, 3600, 3850],
+      data: fullData2.slice(-8),
       color: '#33BEEC',
       bgAlpha: 'rgba(34, 211, 238, 0.15)',
       yAxisID: 'y1'
     }
   ]
 })
+
+const getDataForPeriod = (value) => {
+  let count = 8 // default
+  switch (value) {
+    case '7d':
+      count = 7;
+      break
+    case '1m':
+      count = 2;
+      break
+    case '3m':
+      count = 3;
+      break
+    case '6m':
+      count = 4;
+      break
+    case '2y':
+      count = 6;
+      break
+    case '5y':
+      count = 8;
+      break
+    case 'custom':
+      count = 8;
+      break
+  }
+  const startIndex = Math.max(0, fullLabels.length - count)
+  return {
+    labels: fullLabels.slice(startIndex, startIndex + count),
+    data1: fullData1.slice(startIndex, startIndex + count),
+    data2: fullData2.slice(startIndex, startIndex + count)
+  }
+}
+
+const updateChartData = (value) => {
+  const data = getDataForPeriod(value)
+  chartConfig.value.labels = data.labels
+  chartConfig.value.datasets[0].data = data.data1
+  chartConfig.value.datasets[1].data = data.data2
+  if (chartInstance) {
+    chartInstance.data.labels = data.labels
+    chartInstance.data.datasets[0].data = data.data1
+    chartInstance.data.datasets[1].data = data.data2
+    chartInstance.update('none')
+  }
+}
 
 const toggleDataset = (index) => {
   activeDatasets.value[index] = !activeDatasets.value[index]
@@ -278,6 +328,7 @@ onUnmounted(() => {
 
 const select = (opt) => {
   selectedLabel.value = opt.label
+  updateChartData(opt.value)
   open.value = false
 }
 
