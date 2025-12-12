@@ -1,7 +1,4 @@
 <script setup>
-import BacklinksPerUrl from "~/components/charts/BacklinksPerUrl.vue";
-import BackLinksPerAnchor from "~/components/charts/BackLinksPerAnchor.vue";
-
 useHead({
   title: "Saynine"
 })
@@ -18,11 +15,12 @@ useHead({
     <ChartsWrapper class="mt-17">
       <ChartsTrafficInfo/>
     </ChartsWrapper>
+    <!--    <ChartsSeoChart/>-->
     <ChartsWrapper title="Ranking results by Ahrefs" class="mt-40">
       <ChartsTegInfo/>
     </ChartsWrapper>
-    <BackLinksPerAnchor class="mt-40"/>
-    <BacklinksPerUrl class="mt-40"/>
+    <ChartsBackLinksPerAnchor class="mt-40"/>
+    <ChartsBacklinksPerUrl class="mt-40"/>
     <CitationsWrapper class="mt-40"/>
   </div>
 </template>

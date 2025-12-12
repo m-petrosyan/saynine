@@ -13,10 +13,12 @@
     --text-md: 22px;
     --text-info: 19px;
     --text-base: 16px;
+    --text-xs: 15px;
     --text-sm: 14px;
 
     /* Colors */
     --color-blue: #077cfd;
+    --color-blue-lighten: #33BEEC;
     --color-blue-light: #99CAFF;
     --color-green: #B5DE44;
     --color-green-dark: #435A02;
@@ -40,6 +42,7 @@
 
     /* Fonts */
     --font-sans: 'LeagueSpartan', sans-serif;
+    --font-inter: 'Inter', sans-serif;
 
     /* font weight */
     --font-weight-light: 400;

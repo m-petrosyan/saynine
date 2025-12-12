@@ -37,6 +37,7 @@ const trafficData = [
             noarrow/>
       </div>
     </div>
-    <ElementsVideoHover :start="ElephantYellow" :hover="ElephantYellowHover" class="mt-20 absolute left-0"/>
+    <ElementsVideoHover :start="ElephantYellow" :hover="ElephantYellowHover"
+                        class="mt-20 absolute -left-34 brightness-110"/>
   </div>
 </template>

@@ -16,7 +16,7 @@ import ElephantFootballHover from '@/assets/videos/elephant_football_hover.mp4'
     </div>
     <div class="w-8/12 flex items-center ">
       <ElementsVideoHover :start="ElephantFootball" :hover="ElephantFootballHover"
-                          class="ml-20  absolute right-0"/>
+                          class="ml-20"/>
     </div>
   </div>
 </template>
