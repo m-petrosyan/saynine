@@ -1,9 +1,24 @@
 <script setup>
-import {onMounted, onUnmounted, ref, watch} from 'vue'
+import {onMounted, onUnmounted, ref, useTemplateRef, watch} from 'vue'
+import {onClickOutside} from '@vueuse/core'
 
 const chartCanvas = ref(null)
 const activeDatasets = ref([true, true])
 let chartInstance = null
+const open = ref(false)
+const selectedLabel = ref('Last 2 years')
+const target = useTemplateRef('target')
+
+const options = [
+  {label: 'Last 7 days', value: '7d'},
+  {label: 'Last month', value: '1m'},
+  {label: 'Last 3 months', value: '3m'},
+  {label: 'Last 6 months', value: '6m'},
+  {label: 'Last 2 years', value: '2y'},
+  {label: 'Last 5 years', value: '5y'},
+  {label: 'Custom range', value: 'custom'}
+]
+
 
 const chartConfig = ref({
   labels: [
@@ -42,8 +57,7 @@ const toggleDataset = (index) => {
   }
 }
 
-
-function customTooltip(context) {
+const customTooltip = (context) => {
   const {chart, tooltip} = context;
 
   let tooltipEl = chart.canvas.parentNode.querySelector('.chartjs-tooltip');
@@ -94,7 +108,6 @@ function customTooltip(context) {
   tooltipEl.style.left = positionX + tooltip.caretX + 'px';
   tooltipEl.style.top = positionY + tooltip.caretY + 'px';
 }
-
 
 onMounted(async () => {
   if (process.client && chartCanvas.value) {
@@ -263,25 +276,14 @@ onUnmounted(() => {
   }
 })
 
-
-const open = ref(false)
-
-const options = [
-  {label: 'Last 7 days', value: '7d'},
-  {label: 'Last month', value: '1m'},
-  {label: 'Last 3 months', value: '3m'},
-  {label: 'Last 6 months', value: '6m'},
-  {label: 'Last 2 years', value: '2y'},
-  {label: 'Last 5 years', value: '5y'},
-  {label: 'Custom range', value: 'custom'}
-]
-
-const selectedLabel = ref('Last 2 years')
-
 const select = (opt) => {
   selectedLabel.value = opt.label
   open.value = false
 }
+
+onClickOutside(target, () => {
+  open.value = false
+})
 
 const openToggle = () => {
   open.value = !open.value
@@ -296,7 +298,6 @@ const openToggle = () => {
         @toggle-dataset="toggleDataset"
     />
     <div class="border-2 border-white-blue outline-6 outline-white-blue-light  rounded-xl px-6 mt-6">
-      {{ open }}
       <div class="flex justify-end items-center mb-6 w-full mt-8 relative">
         <div @click="openToggle"
              class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none">
@@ -310,8 +311,7 @@ const openToggle = () => {
           </svg>
         </div>
 
-        <!-- Выпадающий список -->
-        <div v-if="open"
+        <div v-if="open" ref="target"
              class="absolute top-12 right-0 w-44 bg-white rounded-xl shadow-lg border border-slate-100 py-2 text-sm z-50">
 
           <div v-for="(opt, i) in options" :key="i"
