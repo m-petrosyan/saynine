@@ -13,7 +13,7 @@ const trafficData = [
 </script>
 
 <template>
-  <div class="w-3/12 relative">
+  <div class="w-4/12 relative">
     <div v-for="(item,index) in trafficData" :key="item.title"
          class=" pb-4 mb-4"
          :class="{'border-b-2 border-white-blue':index !== trafficData.length - 1 }">

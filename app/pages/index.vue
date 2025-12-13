@@ -12,13 +12,8 @@ useHead({
       </div>
       <ChartsInfo/>
     </div>
-    <ChartsWrapper class="mt-17">
-      <ChartsTrafficInfo/>
-    </ChartsWrapper>
-    <!--    <ChartsSeoChart/>-->
-    <ChartsWrapper title="Ranking results by Ahrefs" class="mt-40">
-      <ChartsTegInfo/>
-    </ChartsWrapper>
+    <ChartsTraffic class="mt-17"/>
+    <ChartsKeywords class="mt-40"/>
     <ChartsBackLinksPerAnchor class="mt-40"/>
     <ChartsBacklinksPerUrl class="mt-40"/>
     <CitationsWrapper class="mt-40"/>
