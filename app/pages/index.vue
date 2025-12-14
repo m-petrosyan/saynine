@@ -15,7 +15,7 @@ useHead({
     <ChartsAreaTraffic class="mt-17"/>
     <ChartsElementsKeywords class="mt-40"/>
     <ChartsDoughnutAnchor class="mt-40"/>
-    <ChartsElementsBacklinksPerUrl class="mt-40"/>
+    <ChartsDoughnutBacklinks class="mt-40"/>
     <CitationsWrapper class="mt-40"/>
   </div>
 </template>

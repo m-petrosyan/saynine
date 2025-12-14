@@ -2,7 +2,8 @@
 import {onMounted, onUnmounted, ref} from 'vue'
 
 const props = defineProps({
-  data: {type: Array, required: true}
+  data: {type: Array, required: true},
+  url: {type: Boolean},
 })
 
 const canvas = ref(null)
@@ -35,7 +36,10 @@ const customTooltip = (context) => {
   const pointColor = point.dataset.borderColor[point.dataIndex]
   tooltipEl.innerHTML = `
     <div class="flex items-center gap-2 text-gray-500">
-      <span class="w-4 h-4 rounded-full" style="background: ${pointColor}"></span>
+          <p class="w-5 h-5 rounded-full text-white flex justify-center items-center text-sm"
+             style="background: ${pointColor}">
+       ${props.url ? `<span>${value}</span>` : ''}
+          </p>
       <div class="flex gap-2">
         <p class="font-normal ">${label}</p>
         <p style="color: ${pointColor}" class="font-base font-medium">${value}</p>
