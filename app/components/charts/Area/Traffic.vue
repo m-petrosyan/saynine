@@ -54,10 +54,10 @@ provide('chartContext', {
 
   <div>
     <div class="flex justify-between gap-x-16">
-      <ChartsTrafficInfo/>
+      <ChartsElementsTrafficInfo/>
       <div class="w-full">
-        <ChartsButtons/>
-        <Charts/>
+        <ChartsElementsButtons/>
+        <ChartsArea/>
       </div>
     </div>
   </div>

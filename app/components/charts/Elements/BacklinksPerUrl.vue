@@ -1,6 +1,6 @@
 <script setup>
-import ElephantOnRest from "@/assets/videos/elephant_on_rest.mp4";
-import ElephantOnRestHover from "@/assets/videos/elephant_on_rest_hover.mp4";
+import ElephantOnRest from "~/assets/videos/elephant_on_rest.mp4";
+import ElephantOnRestHover from "~/assets/videos/elephant_on_rest_hover.mp4";
 
 defineProps({
   title: {

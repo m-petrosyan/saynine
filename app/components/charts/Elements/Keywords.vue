@@ -56,9 +56,9 @@ provide('chartContext', {
           <h4 class="text-xl font-bold">Keywords</h4>
           <p class="text-sm text-gray-500">Select the keyword to see the info</p>
         </div>
-        <ChartsButtons class="flex-col"/>
+        <ChartsAreaButtons class="flex-col text-md"/>
       </div>
-      <Charts/>
+      <ChartsArea/>
     </div>
   </div>
 </template>

@@ -1,9 +1,9 @@
 <script setup>
-import Backlink from "@/assets/icons/backlink.svg";
-import Average from "@/assets/icons/average.svg";
-import Domain from "@/assets/icons/domain.svg";
-import ElephantYellow from "@/assets/videos/elephant_yellow_tshirt.mp4";
-import ElephantYellowHover from "@/assets/videos/elephant_yellow_tshirt_hover.mp4";
+import Backlink from "~/assets/icons/backlink.svg";
+import Average from "~/assets/icons/average.svg";
+import Domain from "~/assets/icons/domain.svg";
+import ElephantYellow from "~/assets/videos/elephant_yellow_tshirt.mp4";
+import ElephantYellowHover from "~/assets/videos/elephant_yellow_tshirt_hover.mp4";
 
 const trafficData = [
   {title: 'Backlinks provided', value: '15/30', percent: '50%', growth: true, icon: Backlink},

@@ -1,6 +1,6 @@
 <script setup>
-import ChartDoughnut from "@/assets/icons/chart_doughnut.svg";
-import ChartLine from "@/assets/icons/chart_line.svg";
+import ChartDoughnut from "~/assets/icons/chart_doughnut.svg";
+import ChartLine from "~/assets/icons/chart_line.svg";
 
 const chartData = [
   {title: 'DR', from: 70, to: 82, percent: '15%', growth: true, icon: ChartDoughnut},
@@ -16,7 +16,7 @@ const chartData = [
         <img :src="chart.icon" :alt="chart.title"/>
         <p class="font-medium">{{ chart.title }}</p>
         <p class="text-xl">{{ chart.from }}</p>
-        <img src="@/assets/icons/arrow_blue.svg" alt="arrow">
+        <img src="../../../assets/icons/arrow_blue.svg" alt="arrow">
         <p class="text-xl">{{ chart.to }}</p>
       </div>
       <ElementsRankInfo :value="chart.percent" :growth="chart.growth"/>

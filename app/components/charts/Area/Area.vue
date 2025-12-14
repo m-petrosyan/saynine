@@ -326,9 +326,9 @@ const openToggle = () => {
           </svg>
         </div>
         <div v-if="open" ref="target"
-             class="absolute top-12 right-0 w-44 bg-white rounded-xl shadow-lg border border-slate-100 py-2 text-sm z-50">
+             class="absolute top-12 right-0 w-44 bg-white rounded-xl shadow-lg py-2 text-sm z-50">
           <div v-for="(opt, i) in options" :key="i" @click="select(opt)"
-               class="px-4 py-2 cursor-pointer text-slate-700 hover:bg-slate-50">
+               class="px-4 py-2 cursor-pointer hover:bg-slate-50">
             {{ opt.label }}
           </div>
         </div>
