@@ -73,7 +73,7 @@ onMounted(async () => {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '80%',
+        cutout: '78%',
         plugins: {
           legend: {display: false},
           tooltip: {
@@ -108,7 +108,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative h-96 mx-auto">
+  <div class="relative h-96 w-full mx-auto">
     <canvas ref="canvas"></canvas>
   </div>
 </template>

@@ -56,7 +56,7 @@ provide('chartContext', {
     <div class="flex justify-between gap-x-16">
       <ChartsElementsTrafficInfo/>
       <div class="w-full">
-        <ChartsElementsButtons/>
+        <ChartsAreaButtons/>
         <ChartsArea/>
       </div>
     </div>
