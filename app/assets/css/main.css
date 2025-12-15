@@ -37,7 +37,7 @@
     /* Breakpoints */
     --breakpoint-sm: 390px;
     --breakpoint-md: 744px;
-    --breakpoint-xl: 1920px;
+    --breakpoint-lg: 1920px;
 
     /* Width */
     --max-width-container: 1640px;

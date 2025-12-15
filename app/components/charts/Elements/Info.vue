@@ -16,7 +16,7 @@ const chartData = [
         <img :src="chart.icon" :alt="chart.title"/>
         <p class="font-medium">{{ chart.title }}</p>
         <p class="text-xl">{{ chart.from }}</p>
-        <img src="../../../assets/icons/arrow_blue.svg" alt="arrow">
+        <img src="@/assets/icons/arrow_blue.svg" alt="arrow">
         <p class="text-xl">{{ chart.to }}</p>
       </div>
       <ElementsRankInfo :value="chart.percent" :growth="chart.growth"/>

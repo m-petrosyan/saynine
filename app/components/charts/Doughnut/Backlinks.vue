@@ -44,10 +44,10 @@ const data = ref([
         class="w-[1230px] h-[500px] mx-auto flex px-30 justify-center items-center relative border-3 border-white-blue outline-7 outline-white-100 rounded-xl ">
       <div class="flex gap-x-20 w-full h-full items-center justify-center">
         <ChartsDoughnutLabel :data="data" class="w-9/12" url/>
-        <ChartsDoughnut :data="data" class="w-3/12" url/>
+        <ChartsDoughnut :data="data" class="w-3/12" :url/>
       </div>
       <ElementsVideoHover :start="ElephantPeeking" :hover="ElephantPeekingHover"
-                          class="absolute top-10 right-0 translate-x-[56%]"/>
+                          class="absolute top-10 right-0"/>
     </div>
   </div>
 </template>

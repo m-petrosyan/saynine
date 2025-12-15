@@ -12,6 +12,7 @@ const open = ref(false)
 const selectedLabel = ref('Last 2 years')
 const target = useTemplateRef('target')
 
+
 const options = [
   {label: 'Last 7 days', value: '7d'},
   {label: 'Last month', value: '1m'},
@@ -29,6 +30,23 @@ const chartConfig = ref({
   labels: [],
   datasets: []
 })
+
+const getDisplayLabels = (labels) => {
+  console.log(labels)
+  const isMobile = window.innerWidth < 744
+  const maxLabels = isMobile ? 4 : 8
+
+  if (labels.length <= maxLabels) return labels
+
+  const indices = []
+  for (let i = 0; i < maxLabels; i++) {
+    indices.push(Math.floor(i * (labels.length - 1) / (maxLabels - 1)))
+  }
+
+  return indices.map(i => labels[i])
+}
+
+const displayLabels = ref([])
 
 const getDataForPeriod = (value) => {
   let count = fullLabels.value.length
@@ -77,6 +95,7 @@ const updateChartData = (value) => {
     })
     chartInstance.update('none')
   }
+  displayLabels.value = getDisplayLabels(data.labels)
 }
 
 const customTooltip = (context) => {
@@ -106,7 +125,7 @@ const customTooltip = (context) => {
   }
   const label = tooltip.dataPoints[0].label
   const lines = tooltip.dataPoints.map(dp => `
-    <div class="flex items-center gap-2 p-1">
+    <div class="flex items-center gap-2 p-1 whitespace-nowrap">
       <span class="w-4 h-4 rounded-full" style="background:${dp.dataset.borderColor}"></span>
       <span class="">${dp.dataset.label}:</span> <span style="color:${dp.dataset.borderColor}">${dp.formattedValue}</span>
     </div>
@@ -162,7 +181,10 @@ onMounted(async () => {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {left: 0, right: 0}
+        },
         aspectRatio: 2.8,
         animation: false,
         interaction: {
@@ -206,6 +228,7 @@ onMounted(async () => {
         },
         scales: {
           x: {
+            offset: false,
             grid: {
               display: false,
               drawBorder: false
@@ -214,11 +237,12 @@ onMounted(async () => {
               display: false
             },
             ticks: {
+              display: false, // Скрыть встроенные labels
               color: '#646E8C',
               font: {
                 size: 14
               },
-              padding: 8
+              padding: 0,
             }
           },
           y: {
@@ -240,7 +264,8 @@ onMounted(async () => {
                 size: 11
               },
               padding: 8,
-              stepSize: 2
+              stepSize: 2,
+              maxTicksLimit: chartConfig.value.labels.length
             }
           },
           y1: {
@@ -274,6 +299,9 @@ onMounted(async () => {
       }
     })
   }
+  window.addEventListener('resize', () => {
+    displayLabels.value = getDisplayLabels(chartConfig.value.labels)
+  })
 })
 
 watch(activeDatasets, () => {
@@ -283,6 +311,7 @@ watch(activeDatasets, () => {
         dataset.hidden = !activeDatasets.value[index]
       }
     })
+    chartInstance.options.scales.x.ticks.maxTicksLimit = data.labels.length
     chartInstance.update('none')
   }
 }, {deep: true})
@@ -295,6 +324,9 @@ onUnmounted(() => {
   if (chartInstance) {
     chartInstance.destroy()
   }
+  window.removeEventListener('resize', () => {
+    displayLabels.value = getDisplayLabels(chartConfig.value.labels)
+  })
 })
 
 const select = (opt) => {
@@ -313,17 +345,14 @@ const openToggle = () => {
 </script>
 
 <template>
-  <div class="rounded-xl p-6 w-full font-inter font-normal">
-    <div class="border-2 border-white-blue outline-6 outline-white-blue-light rounded-xl px-6 mt-6">
-      <div class="flex justify-end items-center mb-6 w-full mt-8 relative">
+  <div class="rounded-xl p-0 md:p-6 w-full font-inter font-normal">
+    <div class="border-2 border-white-blue outline-6 outline-white-blue-light rounded-xl mt-6 h-full">
+      <div class="flex justify-end items-center mb-6 w-full mt-2 md:mt-8 relative">
         <div @click="openToggle"
              class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none">
           <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
           <span>{{ selectedLabel }}</span>
-          <svg class="w-4 h-4 text-cyan-400 transition-transform duration-200" :class="{ 'rotate-180': open }"
-               fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
+          <img src="@/assets/icons/arrow_down.svg" alt="arrow" :class="{ 'rotate-180': open }"/>
         </div>
         <div v-if="open" ref="target"
              class="absolute top-12 right-0 w-44 bg-white rounded-xl shadow-lg py-2 text-sm z-50">
@@ -333,8 +362,15 @@ const openToggle = () => {
           </div>
         </div>
       </div>
-      <div class="relative">
-        <canvas ref="chartCanvas"></canvas>
+      <div class="p-2 md:py-6 md:px-10">
+        <div class="relative h-[400px] p-0">
+          <canvas ref="chartCanvas"></canvas>
+        </div>
+        <div class="flex justify-between px-0 mt-0 text-sm text-slate-600">
+          <div v-for="(label, i) in displayLabels" :key="i" class="flex-1 text-center">
+            {{ label }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
