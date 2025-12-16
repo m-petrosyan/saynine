@@ -35,13 +35,13 @@ const data = ref([
 
 <template>
   <div>
-    <div class="font-inter relative flex items-center justify-between lg:justify-center mb-20">
+    <div class="font-inter relative flex items-center md:justify-center justify-between lg:justify-center mb-20">
       <ElementsVideoHover :start="ElephantOnRest" :hover="ElephantOnRestHover"
                           class=""/>
-      <h2 class="text-center text-3xl lg:text-subtitle font-bold">Number of backlinks per URL</h2>
+      <h2 class="text-center text-4xl lg:text-6xl font-bold">Number of backlinks per URL</h2>
     </div>
     <div
-        class="max-w-[1230px] w-full mx-auto flex px-6 lg:py-6 lg:px-30 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
+        class="max-w-[1230px] w-full  mx-auto flex lg:py-14 p-6 lg:px-30 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
       <div class="flex flex-col-reverse lg:flex-row gap-x-20 w-full h-full lg:items-center justify-center">
         <ChartsDoughnutLabel :data="data" class="w-full lg:w-6/12" url/>
         <ChartsDoughnut :data="data" class="w-6/12" url/>

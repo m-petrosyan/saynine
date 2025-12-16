@@ -17,7 +17,7 @@ const setActive = (index) => {
         v-for="(dataset, index) in chartData.datasets"
         :key="index"
         @click="setActive(index)"
-        class="flex flex-1 justify-between items-center text-lg py-3 px-3 rounded-lg cursor-pointer transition-colors border-[#E5F1FF] border-1"
+        class="flex flex-1 justify-between items-center text-xl py-3 px-3 rounded-lg cursor-pointer transition-colors border-[#E5F1FF] border-1"
         :class="{'bg-white-blue-light' :activeDatasets[index] }">
         <span class="flex gap-2 items-center">
           <span

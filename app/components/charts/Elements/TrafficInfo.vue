@@ -19,16 +19,16 @@ const trafficData = [
          :class="{'border-b-2 border-white-blue':index !== trafficData.length - 1 }">
       <div class="flex items-center gap-4">
         <img :src="item.icon" :alt="item.title"/>
-        <h4 class="text-md font-bold">{{ item.title }}</h4>
+        <h4 class="text-lg font-bold">{{ item.title }}</h4>
       </div>
       <div class="flex items-center justify-between">
         <div class="flex flex-col">
-          <p class="text-xl font-bold pt-6">{{ item.value }}</p>
-          <p class="text-info text-gray">Min. agreed</p>
+          <p class="text-2xl font-bold pt-6">{{ item.value }}</p>
+          <p class="text-md text-gray">Min. agreed</p>
         </div>
         <div v-if="item.avg" class="flex flex-col">
-          <p class="text-xl font-bold pt-6">{{ item.avg }}</p>
-          <p class="text-info text-gray">Avg. provided</p>
+          <p class="text-2xl font-bold pt-6">{{ item.avg }}</p>
+          <p class="text-md text-gray">Avg. provided</p>
         </div>
         <ElementsRankInfo
             v-if="item.percent"

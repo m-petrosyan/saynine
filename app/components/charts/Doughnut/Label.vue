@@ -10,7 +10,7 @@ const props = defineProps({
     <div>
       <div v-for="(item, i) in props.data" :key="i" class="flex mt-1 justify-between">
         <div class="flex items-center gap-2 mb-2">
-          <p class="w-4 h-4 rounded-full text-white flex font-normal justify-center items-center text-sm"
+          <p class="w-4 h-4 rounded-full text-white flex font-normal justify-center items-center text-xs"
              :style="{ backgroundColor: item.color }">
             <span v-if="url">{{ item.value }}</span>
           </p>

@@ -21,7 +21,7 @@ const customTooltip = (context) => {
   let tooltipEl = chart.canvas.parentNode.querySelector('.chartjs-tooltip')
   if (!tooltipEl) {
     tooltipEl = document.createElement('div')
-    tooltipEl.classList.add('chartjs-tooltip', 'absolute', 'bg-white', 'border', 'border-slate-200', 'rounded-md', 'whitespace-nowrap', 'p-4', 'pointer-events-none', 'text-sm', 'font-inter', 'transition-all', 'duration-100', 'z-50', 'shadow-lg')
+    tooltipEl.classList.add('chartjs-tooltip', 'absolute', 'bg-white', 'border', 'border-slate-200', 'rounded-md', 'whitespace-nowrap', 'p-4', 'pointer-events-none', 'text-xs', 'font-inter', 'transition-all', 'duration-100', 'z-50', 'shadow-lg')
     chart.canvas.parentNode.appendChild(tooltipEl)
   }
   if (tooltip.opacity === 0) {
@@ -36,7 +36,7 @@ const customTooltip = (context) => {
   const pointColor = point.dataset.borderColor[point.dataIndex]
   tooltipEl.innerHTML = `
     <div class="flex items-center gap-2 text-gray-500">
-          <p class="w-5 h-5 rounded-full text-white flex justify-center items-center text-sm"
+          <p class="w-5 h-5 rounded-full text-white flex justify-center items-center text-xs"
              style="background: ${pointColor}">
        ${props.url ? `<span>${value}</span>` : ''}
           </p>

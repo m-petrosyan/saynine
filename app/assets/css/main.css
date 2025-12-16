@@ -3,21 +3,24 @@
 
 @theme {
     /* Font sizes */
-    --text-6xl: 72px;
-    --text-title: 48px;
-    --text-subtitle: 60px;
-    --text-3xl: 34px;
-    --text-2xl: 30px;
-    --text-xl: 26px;
-    --text-lg: 24px;
-    --text-md: 22px;
-    --text-info: 19px;
+    --text-7xl: 72px;
+    --text-6xl: 60px;
+    --text-5xl: 48px;
+    --text-4xl: 34px;
+    --text-3xl: 30px;
+    --text-2xl: 26px;
+    --text-xl: 24px;
+    --text-lg: 22px;
+    --text-md-lg: 20px;
+    --text-md: 19px;
+    --text-base-lg: 18px;
     --text-base: 16px;
-    --text-xs: 15px;
-    --text-sm: 14px;
-    --text-extra-sm: 10px;
+    --text-sm: 15px;
+    --text-xs: 14px;
+    --text-xxs: 10px;
 
     /* Colors */
+    --color-blue-900: #10335f;
     --color-blue-dark: #0E44B0;
     --color-blue: #077cfd;
     --color-blue-lighten: #33BEEC;
@@ -63,4 +66,3 @@
         color: theme('colors.base');
     }
 }
-
