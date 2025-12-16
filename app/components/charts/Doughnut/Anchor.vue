@@ -44,7 +44,7 @@ const data = ref([
       Number of backlinks per anchor text</h2>
     <div
         class="max-w-[1230px] w-full relative mx-auto flex lg:py-14 pb-5 px-3 md:p-6 lg:px-30 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
-      <div class="flex flex-col lg:flex-row gap-x-20 w-full h-full lg:items-center justify-center">
+      <div class="flex flex-col lg:flex-row gap-y-10 gap-x-20 w-full h-full lg:items-center justify-center">
         <ChartsDoughnut :data="data" class="w-full md:w-6/12 font-inter px-7"/>
         <ChartsDoughnutLabel :data="data" class="w-full lg:w-6/12"/>
       </div>

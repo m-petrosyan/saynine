@@ -42,11 +42,9 @@ const data = ref([
       <h2 class="text-center text-4xl lg:text-6xl font-bold">Number of backlinks per URL</h2>
     </div>
     <div
-        class="max-w-[1230px] w-full relative mx-auto flex lg:py-14 pb-5 px-3 md:p-6 lg:px-30 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
-      <div class="flex flex-col-reverse lg:flex-row gap-x-20 w-full h-full lg:items-center justify-center">
-        <ChartsDoughnutLabel :data="data" class="w-full lg:w-6/12 " url/>
-        <ChartsDoughnut :data="data" class="w-full md:w-6/12 font-inter px-7" url/>
-      </div>
+        class="max-w-[1230px] w-full flex-col-reverse lg:flex-row gap-x-20 relative mx-auto flex lg:py-14 pb-5 px-3 md:p-6 lg:px-16 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
+      <ChartsDoughnutLabel :data="data" class="w-full lg:w-6/12 " url/>
+      <ChartsDoughnut :data="data" class="w-full md:w-6/12 font-inter px-7" url/>
     </div>
   </div>
 </template>

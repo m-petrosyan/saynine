@@ -7,8 +7,8 @@ const props = defineProps({
 
 <template>
   <div class="font-inter flex justify-center flex-col mt-4">
-    <div>
-      <div v-for="(item, i) in props.data" :key="i" class="flex mt-1 justify-between">
+    <div class="flex flex-col gap-y-1">
+      <div v-for="(item, i) in props.data" :key="i" class="flex mt-1 justify-between font-normal">
         <div class="flex items-center gap-3 mb-2">
           <p class="w-4 h-4 lg:w-5 lg:h-5 rounded-full text-white flex font-normal justify-center items-center text-xs"
              :class="{'w-5 h-5':url}"
