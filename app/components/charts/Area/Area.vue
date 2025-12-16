@@ -31,7 +31,7 @@ const chartConfig = ref({
 })
 
 const getDisplayLabels = (labels) => {
-  const isMobile = window?.innerWidth < 744
+  const isMobile = window?.innerWidth < 768
   const maxLabels = isMobile ? 4 : 8
 
   if (labels.length <= maxLabels) return labels
