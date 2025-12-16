@@ -13,7 +13,7 @@ const trafficData = [
 </script>
 
 <template>
-  <div class="w-full md:w-4/12 relative">
+  <div class="relative">
     <div v-for="(item,index) in trafficData" :key="item.title"
          class=" pb-4 mb-4"
          :class="{'border-b-2 border-white-blue':index !== trafficData.length - 1 }">
@@ -34,10 +34,11 @@ const trafficData = [
             v-if="item.percent"
             value="50%"
             :growth="item.growth"
-            noarrow/>
+            noarrow
+            class="text-[17px]"/>
       </div>
     </div>
     <ElementsVideoHover :start="ElephantYellow" :hover="ElephantYellowHover"
-                        class="mt-20 md:absolute -left-34 brightness-110"/>
+                        class="hidden md:block mt-20 md:absolute -left-34 brightness-110"/>
   </div>
 </template>

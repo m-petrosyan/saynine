@@ -35,19 +35,17 @@ const data = ref([
 
 <template>
   <div>
-    <div class="relative">
+    <div class="font-inter relative flex items-center justify-between md:justify-center mb-20">
       <ElementsVideoHover :start="ElephantOnRest" :hover="ElephantOnRestHover"
-                          class="absolute bottom-0 left-22"/>
-      <h2 class="text-center text-subtitle font-bold mb-10">Number of backlinks per URL</h2>
+                          class=""/>
+      <h2 class="text-center text-3xl md:text-subtitle font-bold">Number of backlinks per URL</h2>
     </div>
     <div
-        class="w-[1230px] h-[500px] mx-auto flex px-30 justify-center items-center relative border-3 border-white-blue outline-7 outline-white-100 rounded-xl ">
-      <div class="flex gap-x-20 w-full h-full items-center justify-center">
-        <ChartsDoughnutLabel :data="data" class="w-9/12" url/>
-        <ChartsDoughnut :data="data" class="w-3/12" :url/>
+        class="max-w-[1230px] w-full mx-auto flex px-6 md:py-6 md:px-30 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
+      <div class="flex flex-col-reverse md:flex-row gap-x-20 w-full h-full md:items-center justify-center">
+        <ChartsDoughnutLabel :data="data" class="w-full md:w-6/12" url/>
+        <ChartsDoughnut :data="data" class="w-6/12" :url/>
       </div>
-      <ElementsVideoHover :start="ElephantPeeking" :hover="ElephantPeekingHover"
-                          class="absolute top-10 right-0"/>
     </div>
   </div>
 </template>

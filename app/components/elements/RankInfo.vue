@@ -11,7 +11,7 @@ defineProps({
   noarrow: {
     type: Boolean,
     default: false
-  }
+  },
 })
 </script>
 

@@ -9,15 +9,19 @@ const chartData = [
 </script>
 
 <template>
-  <div class="flex gap-4">
+  <div class="flex flex-col sm:flex-row gap-4 justify-between">
     <div v-for="chart in chartData" :key="chart.title"
-         class="flex h-fit items-center border-2 rounded-xl py-2 px-3  border-white-blue gap-4 text-lg">
-      <div class="flex gap-2 items-center font-bold">
-        <img :src="chart.icon" :alt="chart.title"/>
-        <p class="font-medium">{{ chart.title }}</p>
-        <p class="text-xl">{{ chart.from }}</p>
-        <img src="@/assets/icons/arrow_blue.svg" alt="arrow">
-        <p class="text-xl">{{ chart.to }}</p>
+         class="flex h-fit items-start sm:items-center justify-between border-2 rounded-xl py-2 px-3  border-white-blue gap-4 text-lg">
+      <div class="flex flex-col sm:flex-row gap-2 md:items-center font-bold">
+        <div class="flex items-center gap-2">
+          <img :src="chart.icon" :alt="chart.title"/>
+          <p class="font-medium">{{ chart.title }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p class="text-xl">{{ chart.from }}</p>
+          <img src="@/assets/icons/arrow_blue.svg" alt="arrow">
+          <p class="text-xl">{{ chart.to }}</p>
+        </div>
       </div>
       <ElementsRankInfo :value="chart.percent" :growth="chart.growth"/>
     </div>

@@ -46,11 +46,11 @@ provide('chartContext', {
 
 <template>
   <div>
-    <div class="flex flex-col md:flex-row justify-between gap-x-16">
-      <ChartsElementsTrafficInfo/>
-      <div class="w-full">
+    <div class="flex flex-col md:flex-row justify-between gap-0 md:gap-x-12">
+      <ChartsElementsTrafficInfo class="w-full md:w-4/12"/>
+      <div class="md:w-8/12 w-full mt-10 md:mt-0">
         <ChartsAreaButtons class="flex-col md:flex-row"/>
-        <ChartsArea class="h-[555px]"/>
+        <ChartsArea/>
       </div>
     </div>
   </div>

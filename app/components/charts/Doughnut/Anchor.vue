@@ -40,15 +40,17 @@ const data = ref([
 
 <template>
   <div>
-    <h2 class="text-center text-subtitle font-bold">Number of backlinks per anchor text</h2>
+    <h2 class="font-inter md:text-center text-3xl md:text-subtitle font-bold mb-8 md:mb-0 ">Number of backlinks per
+      anchor
+      text</h2>
     <div
-        class="w-[1230px] h-[500px] relative mx-auto flex px-30 justify-center items-center border-3 border-white-blue outline-7 outline-white-100 rounded-xl ">
-      <div class="flex flex-col md:flex-row gap-x-20 w-full h-full items-center justify-center">
+        class="max-w-[1230px] w-full relative mx-auto flex md:py-14 p-6 md:px-30 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
+      <div class="flex flex-col md:flex-row gap-x-20 w-full h-full md:items-center justify-center">
         <ChartsDoughnut :data="data" class="w-6/12"/>
         <ChartsDoughnutLabel :data="data" class="w-full md:w-6/12"/>
       </div>
       <ElementsVideoHover :start="ElephantPeeking" :hover="ElephantPeekingHover"
-                          class="absolute top-[-158px] md:top-10 right-60 md:right-[-150px] rotate-270 md:rotate-0"/>
+                          class="hidden sm:block absolute top-[-148px]  md:top-10 right-[-55px]  md:right-60 scale-50 md:scale-100 md:right-[-150px] rotate-270 md:rotate-0"/>
     </div>
   </div>
 </template>

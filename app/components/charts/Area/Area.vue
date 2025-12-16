@@ -1,6 +1,5 @@
 <script setup>
 import {computed, inject, onMounted, onUnmounted, ref, useTemplateRef, watch} from 'vue'
-import {onClickOutside} from '@vueuse/core'
 
 const context = inject('chartContext')
 if (!context) throw new Error('chartContext not provided')
@@ -32,8 +31,7 @@ const chartConfig = ref({
 })
 
 const getDisplayLabels = (labels) => {
-  console.log(labels)
-  const isMobile = window.innerWidth < 744
+  const isMobile = window?.innerWidth < 744
   const maxLabels = isMobile ? 4 : 8
 
   if (labels.length <= maxLabels) return labels
@@ -49,53 +47,64 @@ const getDisplayLabels = (labels) => {
 const displayLabels = ref([])
 
 const getDataForPeriod = (value) => {
-  let count = fullLabels.value.length
+  if (value === 'custom' || value === '5y') {
+    return {
+      labels: fullLabels.value,
+      datasets: fullDatasets.value.map(d => ({...d, data: d.data}))
+    }
+  }
+
+  const now = new Date()
+  let days
   switch (value) {
     case '7d':
-      count = Math.min(7, fullLabels.value.length);
+      days = 7;
       break
     case '1m':
-      count = Math.min(2, fullLabels.value.length);
+      days = 30;
       break
     case '3m':
-      count = Math.min(3, fullLabels.value.length);
+      days = 90;
       break
     case '6m':
-      count = Math.min(4, fullLabels.value.length);
+      days = 180;
       break
     case '2y':
-      count = Math.min(6, fullLabels.value.length);
+      days = 730;
       break
-    case '5y':
-      count = fullLabels.value.length;
-      break
-    case 'custom':
-      count = fullLabels.value.length;
-      break
+    default:
+      days = 730
   }
-  const startIndex = Math.max(0, fullLabels.value.length - count)
-  const slicedLabels = fullLabels.value.slice(startIndex, startIndex + count)
+  const startDate = new Date(now.getTime() - days * 86400000)
+  const dates = fullLabels.value.map(l => new Date(l))
+  let startIndex = dates.findIndex(date => date >= startDate)
+  if (startIndex === -1) startIndex = 0
+
+  if (fullLabels.value.length - startIndex < 2) {
+    startIndex = Math.max(0, fullLabels.value.length - 2)
+  }
+  const slicedLabels = fullLabels.value.slice(startIndex)
   const slicedDatasets = fullDatasets.value.map(d => ({
     ...d,
-    data: d.data.slice(startIndex, startIndex + count)
+    data: d.data.slice(startIndex)
   }))
   return {labels: slicedLabels, datasets: slicedDatasets}
 }
 
 const updateChartData = (value) => {
-  const data = getDataForPeriod(value)
-  chartConfig.value.labels = data.labels
-  chartConfig.value.datasets = data.datasets
+  const dataForPeriod = getDataForPeriod(value)
+  chartConfig.value.labels = dataForPeriod.labels
+  chartConfig.value.datasets = dataForPeriod.datasets
+  displayLabels.value = getDisplayLabels(dataForPeriod.labels)
   if (chartInstance) {
-    chartInstance.data.labels = data.labels
-    data.datasets.forEach((ds, i) => {
+    chartInstance.data.labels = dataForPeriod.labels
+    dataForPeriod.datasets.forEach((ds, i) => {
       if (chartInstance.data.datasets[i]) {
         chartInstance.data.datasets[i].data = ds.data
       }
     })
     chartInstance.update('none')
   }
-  displayLabels.value = getDisplayLabels(data.labels)
 }
 
 const customTooltip = (context) => {
@@ -237,7 +246,7 @@ onMounted(async () => {
               display: false
             },
             ticks: {
-              display: false, // Скрыть встроенные labels
+              display: false,
               color: '#646E8C',
               font: {
                 size: 14
@@ -264,8 +273,7 @@ onMounted(async () => {
                 size: 11
               },
               padding: 8,
-              stepSize: 2,
-              maxTicksLimit: chartConfig.value.labels.length
+              stepSize: 2
             }
           },
           y1: {
@@ -311,7 +319,6 @@ watch(activeDatasets, () => {
         dataset.hidden = !activeDatasets.value[index]
       }
     })
-    chartInstance.options.scales.x.ticks.maxTicksLimit = data.labels.length
     chartInstance.update('none')
   }
 }, {deep: true})
@@ -347,26 +354,31 @@ const openToggle = () => {
 <template>
   <div class="rounded-xl p-0 md:p-6 w-full font-inter font-normal">
     <div class="border-2 border-white-blue outline-6 outline-white-blue-light rounded-xl mt-6 h-full">
-      <div class="flex justify-end items-center mb-6 w-full mt-2 md:mt-8 relative">
-        <div @click="openToggle"
-             class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none">
-          <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
-          <span>{{ selectedLabel }}</span>
-          <img src="@/assets/icons/arrow_down.svg" alt="arrow" :class="{ 'rotate-180': open }"/>
-        </div>
-        <div v-if="open" ref="target"
-             class="absolute top-12 right-0 w-44 bg-white rounded-xl shadow-lg py-2 text-sm z-50">
-          <div v-for="(opt, i) in options" :key="i" @click="select(opt)"
-               class="px-4 py-2 cursor-pointer hover:bg-slate-50">
-            {{ opt.label }}
+      <div class="flex justify-end items-center mb-6 mt-2 md:mt-8 px-4 md:px-10">
+        <div class="relative">
+          <div @click="openToggle" ref="target"
+               class="flex items-center gap-x-10 md:gap-2 px-3 py-1.5 border border-slate-200 text-xs text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none"
+               :class="open ? 'rounded-t-xl border-b-0' : 'rounded-lg'">
+            <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
+            <span>{{ selectedLabel }}</span>
+            <img src="@/assets/icons/arrow_down.svg" alt="arrow" :class="{ 'rotate-180': open }"/>
+          </div>
+          <div v-if="open"
+               class="absolute top-full left-0 w-full bg-white rounded-b-xl border border-t-0 border-slate-200 shadow-lg py-2 text-sm z-50">
+            <div v-for="(opt, i) in options" :key="i" @click="select(opt)"
+                 class="px-4 py-2 cursor-pointer hover:bg-slate-50 flex items-center justify-between">
+              <span>{{ opt.label }}</span>
+              <img v-if="opt.value === 'custom'" src="@/assets/icons/arrow_down.svg" alt="arrow"
+                   class="w-4 h-4 -rotate-90"/>
+            </div>
           </div>
         </div>
       </div>
-      <div class="p-2 md:py-6 md:px-10">
-        <div class="relative h-[400px] p-0">
+      <div class="p-2 py-8 md:py-6 md:px-10">
+        <div class="relative h-[400px] p-0 md:px-14">
           <canvas ref="chartCanvas"></canvas>
         </div>
-        <div class="flex justify-between px-0 mt-0 text-sm text-slate-600">
+        <div class="flex mt-2 justify-between px-0 mt-0 text-extra-sm md:text-sm text-slate-600">
           <div v-for="(label, i) in displayLabels" :key="i" class="flex-1 text-center">
             {{ label }}
           </div>

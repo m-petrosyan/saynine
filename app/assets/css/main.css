@@ -15,6 +15,7 @@
     --text-base: 16px;
     --text-xs: 15px;
     --text-sm: 14px;
+    --text-extra-sm: 10px;
 
     /* Colors */
     --color-blue-dark: #0E44B0;
@@ -36,9 +37,8 @@
 
     /* Breakpoints */
     --breakpoint-sm: 390px;
-    --breakpoint-md: 744px;
+    --breakpoint-md: 768px;
     --breakpoint-lg: 1920px;
-
     /* Width */
     --max-width-container: 1640px;
 
@@ -55,11 +55,23 @@
     /* border */
     --radius-lg: 60px;
 }
-
+/*:root {*/
+/*    --breakpoint-sm: 390px;*/
+/*    --breakpoint-md: 768px;*/
+/*    --breakpoint-lg: 1920px;*/
+/*}*/
 
 @layer base {
     html {
         font-family: theme('fontFamily.sans'), serif;
         color: theme('colors.base');
+    }
+}
+
+@layer utilities {
+    @media (max-width: var(--breakpoint-sm)) {
+        .mobile-col {
+            flex-direction: column !important;
+        }
     }
 }
