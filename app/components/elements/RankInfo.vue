@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   value: {
-    type: Object,
+    type: [String, Number],
     required: true
   },
   growth: {

@@ -352,12 +352,12 @@ const openToggle = () => {
 </script>
 
 <template>
-  <div class="rounded-xl p-0 md:p-6 w-full font-inter font-normal">
+  <div class="rounded-xl p-0 lg:p-6 w-full font-inter font-normal">
     <div class="border-2 border-white-blue outline-6 outline-white-blue-light rounded-xl mt-6 h-full">
-      <div class="flex justify-end items-center mb-6 mt-2 md:mt-8 px-4 md:px-10">
+      <div class="flex justify-end items-center mb-6 mt-2 lg:mt-8 px-4 lg:px-10">
         <div class="relative">
           <div @click="openToggle" ref="target"
-               class="flex items-center gap-x-10 md:gap-2 px-3 py-1.5 border border-slate-200 text-xs text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none"
+               class="flex items-center gap-x-10 lg:gap-2 px-3 py-1.5 border border-slate-200 text-xs text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none"
                :class="open ? 'rounded-t-xl border-b-0' : 'rounded-lg'">
             <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
             <span>{{ selectedLabel }}</span>
@@ -374,11 +374,11 @@ const openToggle = () => {
           </div>
         </div>
       </div>
-      <div class="p-2 py-8 md:py-6 md:px-10">
-        <div class="relative h-[400px] p-0 md:px-14">
+      <div class="p-2 py-8 lg:py-6 lg:px-10">
+        <div class="relative h-[400px] p-0 lg:px-14">
           <canvas ref="chartCanvas"></canvas>
         </div>
-        <div class="flex mt-2 justify-between px-0 mt-0 text-extra-sm md:text-sm text-slate-600">
+        <div class="flex mt-2 justify-between px-0 mt-0 text-extra-sm lg:text-sm text-slate-600">
           <div v-for="(label, i) in displayLabels" :key="i" class="flex-1 text-center">
             {{ label }}
           </div>

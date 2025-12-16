@@ -3,7 +3,7 @@ import {onMounted, onUnmounted, ref} from 'vue'
 
 const props = defineProps({
   data: {type: Array, required: true},
-  url: {type: Boolean},
+  url: {type: Boolean, default: false},
 })
 
 const canvas = ref(null)

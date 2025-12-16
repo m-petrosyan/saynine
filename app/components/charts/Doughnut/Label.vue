@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
   data: {type: Array, required: true},
-  url: {type: Boolean},
+  url: {type: Boolean, default: false},
 })
 </script>
 

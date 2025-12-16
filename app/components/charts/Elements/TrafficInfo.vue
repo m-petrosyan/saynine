@@ -39,6 +39,6 @@ const trafficData = [
       </div>
     </div>
     <ElementsVideoHover :start="ElephantYellow" :hover="ElephantYellowHover"
-                        class="hidden md:block mt-20 md:absolute -left-34 brightness-110"/>
+                        class="hidden lg:block mt-20 lg:absolute -left-34 brightness-110"/>
   </div>
 </template>

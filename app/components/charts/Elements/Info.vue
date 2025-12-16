@@ -9,10 +9,10 @@ const chartData = [
 </script>
 
 <template>
-  <div class="flex flex-col sm:flex-row gap-4 justify-between">
+  <div class="flex flex-wrap flex-col sm:flex-row gap-4 justify-between">
     <div v-for="chart in chartData" :key="chart.title"
          class="flex h-fit items-start sm:items-center justify-between border-2 rounded-xl py-2 px-3  border-white-blue gap-4 text-lg">
-      <div class="flex flex-col sm:flex-row gap-2 md:items-center font-bold">
+      <div class="flex flex-wrap flex-col sm:flex-row gap-2 lg:items-center font-bold">
         <div class="flex items-center gap-2">
           <img :src="chart.icon" :alt="chart.title"/>
           <p class="font-medium">{{ chart.title }}</p>
