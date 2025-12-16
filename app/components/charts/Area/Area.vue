@@ -354,13 +354,15 @@ const openToggle = () => {
 <template>
   <div class="rounded-xl p-0 lg:p-6 w-full font-inter font-normal">
     <div class="border-2 border-white-blue outline-6 outline-white-blue-light rounded-xl mt-6 h-full">
-      <div class="flex justify-end items-center mb-6 mt-2 lg:mt-8 px-4 lg:px-10">
+      <div class="flex justify-end items-center mb-6 mt-2 md:mt-4 lg:mt-2 lg:mt-8 px-4 lg:px-10">
         <div class="relative">
           <div @click="openToggle" ref="target"
-               class="flex items-center gap-x-10 lg:gap-2 px-3 py-1.5 border border-slate-200 text-sm text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none"
+               class="flex items-center gap-x-2 md:gap-x-10 px-3 py-1.5 border border-slate-200 text-sm text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none"
                :class="open ? 'rounded-t-xl border-b-0' : 'rounded-xxl'">
-            <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
-            <span>{{ selectedLabel }}</span>
+            <div class="flex items-center gap-x-2">
+              <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
+              <span>{{ selectedLabel }}</span>
+            </div>
             <img src="@/assets/icons/arrow_down.svg" alt="arrow" :class="{ 'rotate-180': open }"/>
           </div>
           <div v-if="open"
