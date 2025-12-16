@@ -49,12 +49,12 @@ provide('chartContext', {
 
 <template>
   <div>
-    <h2 class="text-center text-3xl md:text-4xl lg:text-6xl font-bold mb-16">Ranking results by Ahrefs</h2>
+    <h2 class="text-center text-3xl md:text-4xl lg:text-6xl font-bold mb-10 mt:mb-16">Ranking results by Ahrefs</h2>
     <div class="flex flex flex-col lg:flex-row justify-between gap-4 lg:gap-x-12">
       <div class="w-full lg:w-4/12">
         <div class="leading-10 mb-6">
           <h4 class="text-md-lg md:text-2xl font-bold">Keywords</h4>
-          <p class="text-xs md:text-xs text-gray-500">Select the keyword to see the info</p>
+          <p class="text-xs md:text-md text-gray-dark font-normal">Select the keyword to see the info</p>
         </div>
         <ChartsAreaButtons class="flex-col text-lg"/>
       </div>

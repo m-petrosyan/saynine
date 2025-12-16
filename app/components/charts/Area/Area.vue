@@ -358,7 +358,7 @@ const openToggle = () => {
         <div class="relative">
           <div @click="openToggle" ref="target"
                class="flex items-center gap-x-10 lg:gap-2 px-3 py-1.5 border border-slate-200 text-sm text-slate-600 cursor-pointer hover:border-slate-300 bg-white select-none"
-               :class="open ? 'rounded-t-xl border-b-0' : 'rounded-lg'">
+               :class="open ? 'rounded-t-xl border-b-0' : 'rounded-xxl'">
             <img src="@/assets/icons/calendar.svg" alt="calendar" class="w-4 h-4"/>
             <span>{{ selectedLabel }}</span>
             <img src="@/assets/icons/arrow_down.svg" alt="arrow" :class="{ 'rotate-180': open }"/>

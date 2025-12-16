@@ -9,7 +9,7 @@ const chartData = [
 </script>
 
 <template>
-  <div class="flex flex-wrap flex-col md:flex-row gap-4 ">
+  <div class="flex flex-wrap flex-col md:flex-row gap-4 md:justify-between md:justofy-start">
     <div v-for="chart in chartData" :key="chart.title"
          class="flex h-fit items-start md:items-center justify-between border-2 rounded-xl py-2 px-3  border-white-blue gap-4 text-xl">
       <div class="flex flex-wrap flex-col md:flex-row gap-2 lg:items-center font-bold">

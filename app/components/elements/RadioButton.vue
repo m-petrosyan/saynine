@@ -23,7 +23,7 @@ const setActive = (value) => {
 
 <template>
   <div
-      class="flex items-center justify-between p-4 rounded-lg cursor-pointer transition-colors border-1 border-white-blue-light"
+      class="flex items-center justify-between p-4 rounded-xxl cursor-pointer transition-colors border-1 border-white-blue-light"
       :class="{ 'bg-white-blue-light': item.id === active}"
       @click="setActive(item.id)"
   >

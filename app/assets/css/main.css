@@ -57,7 +57,9 @@
     --font-weight-bold: 700;
 
     /* border */
-    --radius-lg: 60px;
+    --radius-xxl: 60px;
+    --radius-4xl: 32px;
+    --rounded-3xl: 24px;
 }
 
 @layer base {

@@ -5,7 +5,11 @@ const props = defineProps({
   },
   hover: {
     type: String,
-  }
+  },
+  classes: {
+    type: String,
+    default: '',
+  },
 })
 
 const isHovered = ref(false)
@@ -37,6 +41,7 @@ onUnmounted(() => stop())
       @mouseleave="isHovered = false"
   >
     <video
+        :class="classes"
         ref="videoRef1"
         v-show="!isHovered"
         muted
@@ -46,6 +51,7 @@ onUnmounted(() => stop())
     </video>
 
     <video
+        :class="classes"
         ref="videoRef2"
         v-show="isHovered"
         muted

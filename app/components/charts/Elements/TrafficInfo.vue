@@ -35,7 +35,7 @@ const trafficData = [
             value="50%"
             :growth="item.growth"
             noarrow
-            class="text-[17px]"/>
+            class="text-[17px] md:text-xl"/>
       </div>
     </div>
     <ElementsVideoHover :start="ElephantYellow" :hover="ElephantYellowHover"
