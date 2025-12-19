@@ -1,9 +1,22 @@
 <script setup>
-import {computed, inject, onMounted, onUnmounted, ref, useTemplateRef, watch} from 'vue'
+import {computed, onMounted, onUnmounted, ref, toRefs, useTemplateRef, watch} from 'vue'
 
-const context = inject('chartContext')
-if (!context) throw new Error('chartContext not provided')
-const {chartData, activeDatasets, toggleDataset} = context
+const props = defineProps({
+  chartData: {
+    type: Object,
+    required: true
+  },
+  activeDatasets: {
+    type: Array,
+    required: true
+  },
+  options: {
+    type: Array,
+    required: true
+  }
+})
+
+const {chartData, activeDatasets, options} = toRefs(props)
 
 const chartCanvas = ref(null)
 let chartInstance = null
@@ -11,19 +24,8 @@ const open = ref(false)
 const selectedLabel = ref('Last 2 years')
 const target = useTemplateRef('target')
 
-
-const options = [
-  {label: 'Last 7 days', value: '7d'},
-  {label: 'Last month', value: '1m'},
-  {label: 'Last 3 months', value: '3m'},
-  {label: 'Last 6 months', value: '6m'},
-  {label: 'Last 2 years', value: '2y'},
-  {label: 'Last 5 years', value: '5y'},
-  {label: 'Custom range', value: 'custom'}
-]
-
-const fullLabels = computed(() => chartData.labels)
-const fullDatasets = computed(() => chartData.datasets)
+const fullLabels = computed(() => chartData.value.labels)
+const fullDatasets = computed(() => chartData.value.datasets)
 
 const chartConfig = ref({
   labels: [],

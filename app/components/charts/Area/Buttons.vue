@@ -1,13 +1,23 @@
 <script setup>
-import {inject} from 'vue'
+import {toRefs} from 'vue'
 
-const context = inject('chartContext')
-if (!context) throw new Error('chartContext not provided')
+const props = defineProps({
+  chartData: {
+    type: Object,
+    required: true
+  },
+  activeDatasets: {
+    type: Array,
+    required: true
+  }
+})
 
-const {chartData, activeDatasets, toggleDataset} = context
+const emit = defineEmits(['toggle'])
+
+const { chartData, activeDatasets } = toRefs(props)
 
 const setActive = (index) => {
-  toggleDataset(index)
+  emit('toggle', index)
 }
 </script>
 
@@ -21,7 +31,7 @@ const setActive = (index) => {
         :class="{'bg-white-blue-light' :activeDatasets[index] }">
         <span class="flex gap-2 items-center">
           <span
-              class="rounded-full w-5 h-5"
+              class="rounded-full w-5 h-5 ml-1"
               :style="activeDatasets[index] ? { backgroundColor: dataset.color } : 'border: 2px solid gray'">
         </span>
       <span>    {{ dataset.name }}</span>

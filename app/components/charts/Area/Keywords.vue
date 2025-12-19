@@ -1,50 +1,14 @@
 <script setup>
-import {provide, ref} from 'vue'
+import { useChartStore } from '@/stores/chart'
+import { computed } from 'vue'
 
-const chartData = {
-  labels: [
-    '21 Jun 2023',
-    '01 Sep 2023',
-    '23 Jan 2024',
-    '6 May 2024',
-    '18 Aug 2024',
-    '30 Nov 2024',
-    '14 Nov 2025',
-    '26 Dec 2025'
-  ],
-  datasets: [
-    {
-      name: 'product strategy',
-      data: [10, 15, 12, 20, 18, 49, 46, 50, 45],
-      color: '#3b82f6',
-      bgAlpha: 'rgba(59, 130, 246, 0.15)',
-      yAxisID: 'y',
-      rank: 15,
-      growth: true
-    },
-    {
-      name: 'product strategy',
-      data: [51, 2364, 1548, 1054, 900, 355, 3900, 2454],
-      color: '#33BEEC',
-      bgAlpha: 'rgba(34, 211, 238, 0.15)',
-      yAxisID: 'y1',
-      rank: 13,
-      growth: true
-    }
-  ]
+const store = useChartStore()
+const chartData = computed(() => store.keywordsData)
+const activeDatasets = computed(() => store.keywordsActiveDatasets)
+
+const onToggleDataset = (index) => {
+  store.toggleKeywordsDataset(index)
 }
-
-const activeDatasets = ref(new Array(chartData.datasets.length).fill(true))
-
-const toggleDataset = (index) => {
-  activeDatasets.value[index] = !activeDatasets.value[index]
-}
-
-provide('chartContext', {
-  chartData,
-  activeDatasets,
-  toggleDataset
-})
 </script>
 
 <template>
@@ -56,9 +20,19 @@ provide('chartContext', {
           <h4 class="text-md-lg md:text-2xl font-bold">Keywords</h4>
           <p class="text-xs md:text-md text-gray-dark font-normal">Select the keyword to see the info</p>
         </div>
-        <ChartsAreaButtons class="flex-col text-lg"/>
+        <ChartsAreaButtons 
+          class="flex-col text-lg" 
+          :chart-data="chartData" 
+          :active-datasets="activeDatasets" 
+          @toggle="onToggleDataset"
+        />
       </div>
-      <ChartsArea class="lg:w-8/12"/>
+      <ChartsArea 
+        class="lg:w-8/12"
+        :chart-data="chartData" 
+        :active-datasets="activeDatasets"
+        :options="store.areaOptions" 
+      />
     </div>
   </div>
 </template>

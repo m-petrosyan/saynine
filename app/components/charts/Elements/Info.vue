@@ -1,6 +1,6 @@
 <script setup>
-import ChartDoughnut from "~/assets/icons/chart_doughnut.svg";
-import ChartLine from "~/assets/icons/chart_line.svg";
+import ChartDoughnut from "@/assets/icons/chart_doughnut.svg";
+import ChartLine from "@/assets/icons/chart_line.svg";
 
 const chartData = [
   {title: 'DR', from: 70, to: 82, percent: '15%', growth: true, icon: ChartDoughnut},

@@ -1,6 +1,9 @@
 <script setup>
 import ElephantOnRest from "@/assets/videos/elephant_on_rest.mp4";
 import ElephantOnRestHover from "@/assets/videos/elephant_on_rest_hover.mp4";
+import {useChartStore} from '@/stores/chart'
+
+const store = useChartStore()
 
 defineProps({
   title: {
@@ -9,28 +12,7 @@ defineProps({
   }
 })
 
-const data = ref([
-  {
-    name: '/logo-maker',
-    value: 1,
-    color: '#0E44B0'
-  },
-  {
-    name: '/ai-logo-generator',
-    value: 2,
-    color: '#077DFD'
-  },
-  {
-    name: '/pros-and-cons-of-creating-your-logo-yourself/',
-    value: 3,
-    color: '#33BEEC'
-  },
-  {
-    name: '/business-name-generator',
-    value: 4,
-    color: '#99CAFF'
-  },
-])
+const data = computed(() => store.backlinksData)
 </script>
 
 <template>

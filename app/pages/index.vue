@@ -2,6 +2,14 @@
 useHead({
   title: "Saynine"
 })
+
+const vvv = computed(() => {
+  return 123
+})
+
+watch(vvv, (newVal) => {
+  console.log("Value changed to:", newVal)
+})
 </script>
 
 <template>

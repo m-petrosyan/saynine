@@ -1,6 +1,9 @@
 <script setup>
 import ElephantPeeking from "@/assets/videos/elephant-peeking.mp4";
 import ElephantPeekingHover from "@/assets/videos/elephant-peeking_hover.mp4";
+import {useChartStore} from '@/stores/chart'
+
+const store = useChartStore()
 
 defineProps({
   title: {
@@ -9,33 +12,7 @@ defineProps({
   }
 })
 
-const data = ref([
-  {
-    name: 'product management software',
-    value: 5,
-    color: '#0E44B0'
-  },
-  {
-    name: 'product strategy',
-    value: 4,
-    color: '#077DFD'
-  },
-  {
-    name: 'product management',
-    value: 3,
-    color: '#33BEEC'
-  },
-  {
-    name: 'enterprise software',
-    value: 2,
-    color: '#99CAFF'
-  },
-  {
-    name: 'enterprise tool',
-    value: 2,
-    color: '#FCD834'
-  }
-])
+const data = computed(() => store.anchorData)
 </script>
 
 <template>
