@@ -261,7 +261,7 @@ onMounted(async () => {
             display: false,
             position: 'left',
             min: 0,
-            max: 60,
+
             grid: {
               color: '#f1f5f9',
               drawBorder: false
@@ -283,7 +283,7 @@ onMounted(async () => {
             display: false,
             position: 'right',
             min: 0,
-            max: 4000,
+
             grid: {
               drawOnChartArea: false,
               drawBorder: false

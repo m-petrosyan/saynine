@@ -46,7 +46,6 @@ export const useChartStore = defineStore('chart', () => {
         return dates;
     };
 
-    // Generate trending data
     const generateData = (count, start, trend, noise) => {
         const data = [];
         let current = start;
