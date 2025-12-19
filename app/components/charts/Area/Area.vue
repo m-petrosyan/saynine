@@ -24,6 +24,12 @@ const open = ref(false)
 const selectedLabel = ref('Last 2 years')
 const target = useTemplateRef('target')
 
+let hoverX = null
+let hoverPositions = {}
+let fractionalIndex = -1
+const mouseMoveHandler = ref(null)
+const mouseLeaveHandler = ref(null)
+
 const fullLabels = computed(() => chartData.value.labels)
 const fullDatasets = computed(() => chartData.value.datasets)
 
@@ -49,13 +55,6 @@ const getDisplayLabels = (labels) => {
 const displayLabels = ref([])
 
 const getDataForPeriod = (value) => {
-  if (value === 'custom' || value === '5y') {
-    return {
-      labels: fullLabels.value,
-      datasets: fullDatasets.value.map(d => ({...d, data: d.data}))
-    }
-  }
-
   const now = new Date()
   let days
   switch (value) {
@@ -77,6 +76,7 @@ const getDataForPeriod = (value) => {
     default:
       days = 730
   }
+
   const startDate = new Date(now.getTime() - days * 86400000)
   const dates = fullLabels.value.map(l => new Date(l))
   let startIndex = dates.findIndex(date => date >= startDate)
@@ -138,12 +138,12 @@ const customTooltip = (context) => {
   const lines = tooltip.dataPoints.map(dp => `
     <div class="flex items-center gap-2 p-1 whitespace-nowrap">
       <span class="w-4 h-4 rounded-full" style="background:${dp.dataset.borderColor}"></span>
-      <span class="">${dp.dataset.label}:</span> <span style="color:${dp.dataset.borderColor}">${dp.formattedValue}</span>
+      <span>${dp.dataset.label}:</span> <span style="color:${dp.dataset.borderColor}">${dp.formattedValue}</span>
     </div>
   `).join('')
   tooltipEl.innerHTML = `
     <div class="mb-2">
-      <span class="text-blue-light">Start:</span>
+      <span class="text-blue-light">Start:</span><router-link to=""
       <span>${label}</span>
     </div>
     ${lines}
@@ -154,11 +154,103 @@ const customTooltip = (context) => {
   tooltipEl.style.top = positionY + tooltip.caretY + 'px'
 }
 
+const handleMouseMove = (e) => {
+  if (!chartInstance) return
+  const rect = chartCanvas.value.getBoundingClientRect()
+  const mouseX = e.clientX - rect.left
+  const scaleX = chartInstance.scales.x
+  fractionalIndex = scaleX.getValueForPixel(mouseX)
+  const dataLength = chartInstance.data.labels.length
+  if (fractionalIndex < 0 || fractionalIndex > dataLength - 1) {
+    if (hoverX !== null) {
+      hoverX = null
+      hoverPositions = {}
+      customTooltip({chart: chartInstance, tooltip: {opacity: 0}})
+      chartInstance.draw()
+    }
+    return
+  }
+  hoverX = mouseX
+  const customDataPoints = []
+  const ys = []
+  chartInstance.data.datasets.forEach((dataset, i) => {
+    if (dataset.hidden) return
+    const dData = dataset.data
+    const index1 = Math.floor(fractionalIndex)
+    const index2 = Math.min(index1 + 1, dData.length - 1)
+    const frac = fractionalIndex - index1
+    const y1 = dData[index1]
+    const y2 = dData[index2]
+    const y = y1 + frac * (y2 - y1)
+    const scaleY = chartInstance.scales[dataset.yAxisID || 'y']
+    const pixelY = scaleY.getPixelForValue(y)
+    hoverPositions[i] = {x: mouseX, y: pixelY, color: dataset.borderColor}
+    ys.push(pixelY)
+    const dp = {
+      datasetIndex: i,
+      dataset,
+      index: fractionalIndex,
+      parsed: {y},
+      label: chartInstance.data.labels[index1],
+      formattedValue: y.toLocaleString(),
+      element: {x: mouseX, y: pixelY}
+    }
+    customDataPoints.push(dp)
+  })
+  if (customDataPoints.length > 0) {
+    const caretY = Math.min(...ys) - 150
+    const tooltipContext = {
+      chart: chartInstance,
+      tooltip: {
+        opacity: 1,
+        dataPoints: customDataPoints,
+        caretX: mouseX,
+        caretY
+      }
+    }
+    customTooltip(tooltipContext)
+  }
+  chartInstance.draw()
+}
+
+const handleMouseLeave = () => {
+  if (hoverX !== null) {
+    hoverX = null
+    hoverPositions = {}
+    fractionalIndex = -1
+    customTooltip({chart: chartInstance, tooltip: {opacity: 0}})
+    chartInstance.draw()
+  }
+}
+
+const createCustomPointsPlugin = () => ({
+  id: 'customPoints_' + Math.random().toString(36).substr(2, 9),
+  afterDatasetsDraw: (chart) => {
+    if (!hoverX) return
+    const ctx = chart.ctx
+    Object.values(hoverPositions).forEach(({x, y, color}) => {
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(x, y, 8, 0, 2 * Math.PI)
+      ctx.fillStyle = color
+      ctx.fill()
+      ctx.strokeStyle = 'white'
+      ctx.lineWidth = 3
+      ctx.stroke()
+      ctx.restore()
+    })
+  }
+})
+
+let customPointsPlugin = null
+
 onMounted(async () => {
   updateChartData('2y')
   if (process.client && chartCanvas.value) {
     const {Chart, registerables} = await import('chart.js')
     Chart.register(...registerables)
+    customPointsPlugin = createCustomPointsPlugin()
+    Chart.register(customPointsPlugin)
     const ctx = chartCanvas.value.getContext('2d')
     const datasets = chartConfig.value.datasets.map((config, index) => ({
       label: config.name,
@@ -176,10 +268,7 @@ onMounted(async () => {
       fill: true,
       tension: 0,
       pointRadius: 0,
-      pointHoverRadius: 8,
-      pointHoverBackgroundColor: config.color,
-      pointHoverBorderColor: 'white',
-      pointHoverBorderWidth: 3,
+      pointHoverRadius: 0,
       borderWidth: 2.5,
       yAxisID: config.yAxisID,
       hidden: !activeDatasets.value[index]
@@ -199,8 +288,7 @@ onMounted(async () => {
         aspectRatio: 2.8,
         animation: false,
         interaction: {
-          mode: 'index',
-          intersect: false
+          mode: 'none'
         },
         plugins: {
           legend: {
@@ -308,6 +396,12 @@ onMounted(async () => {
         }
       }
     })
+
+    mouseMoveHandler.value = handleMouseMove
+    mouseLeaveHandler.value = handleMouseLeave
+    const canvasEl = chartCanvas.value
+    canvasEl.addEventListener('mousemove', mouseMoveHandler.value)
+    canvasEl.addEventListener('mouseleave', mouseLeaveHandler.value)
   }
   window.addEventListener('resize', () => {
     displayLabels.value = getDisplayLabels(chartConfig.value.labels)
@@ -331,7 +425,15 @@ watch(() => chartData, () => {
 
 onUnmounted(() => {
   if (chartInstance) {
+    if (customPointsPlugin) {
+      Chart.unregister(customPointsPlugin)
+    }
     chartInstance.destroy()
+  }
+  if (process.client && chartCanvas.value && mouseMoveHandler.value && mouseLeaveHandler.value) {
+    const canvasEl = chartCanvas.value
+    canvasEl.removeEventListener('mousemove', mouseMoveHandler.value)
+    canvasEl.removeEventListener('mouseleave', mouseLeaveHandler.value)
   }
   window.removeEventListener('resize', () => {
     displayLabels.value = getDisplayLabels(chartConfig.value.labels)
