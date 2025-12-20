@@ -1,10 +1,13 @@
 <script setup>
-import {onMounted, onUnmounted, ref} from 'vue'
+import {onMounted, onUnmounted, ref, watch} from 'vue'
 
 const props = defineProps({
   data: {type: Array, required: true},
   url: {type: Boolean, default: false},
+  hoveredIndex: {type: Number, default: -1},
 })
+
+const emit = defineEmits(['hover'])
 
 const canvas = ref(null)
 let instance = null
@@ -89,18 +92,33 @@ onMounted(async () => {
         onHover: (event, elements, chart) => {
           if (elements.length > 0) {
             const hoveredIndex = elements[0].index
+            emit('hover', hoveredIndex)
             const newColors = originalColors.map((color, i) => i === hoveredIndex ? color : addOpacity(color, 0.3))
             chart.data.datasets[0].backgroundColor = newColors
             chart.update('none')
           } else {
+            emit('hover', -1)
             chart.data.datasets[0].backgroundColor = originalColors
             chart.update('none')
           }
         },
         onLeave: (event, elements, chart) => {
+          emit('hover', -1)
           chart.data.datasets[0].backgroundColor = originalColors
           chart.update('none')
         }
+      }
+    })
+
+    watch(() => props.hoveredIndex, (index) => {
+      if (instance) {
+        if (index >= 0) {
+          const newColors = originalColors.map((color, i) => i === index ? color : addOpacity(color, 0.3))
+          instance.data.datasets[0].backgroundColor = newColors
+        } else {
+          instance.data.datasets[0].backgroundColor = originalColors
+        }
+        instance.update('none')
       }
     })
   }
