@@ -232,7 +232,7 @@ const customTooltip = (context) => {
 
   tooltipEl.style.opacity = 1
   tooltipEl.style.left = leftPos + 'px'
-  tooltipEl.style.top = positionY + tooltip.caretY + 'px'
+  tooltipEl.style.top = positionY + tooltip.caretY - 120 + 'px'
 }
 
 const handleMouseMove = (e) => {
