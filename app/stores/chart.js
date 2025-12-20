@@ -46,15 +46,25 @@ export const useChartStore = defineStore('chart', () => {
         return dates;
     };
 
-    const generateData = (count, start, trend, noise) => {
+    const generateData = (count, start, trend, noise, min = null, max = null) => {
         const data = [];
         let current = start;
+
         for (let i = 0; i < count; i++) {
             current = current + trend + (Math.random() * noise - noise / 2);
+
+            if (min !== null && current < min) {
+                current = min;
+            }
+            if (max !== null && current > max) {
+                current = max;
+            }
+
             data.push(Math.round(current));
         }
         return data;
     };
+
 
     const dates = generateDates();
     const dataCount = dates.length;
@@ -86,7 +96,7 @@ export const useChartStore = defineStore('chart', () => {
         datasets: [
             {
                 name: 'product strategy',
-                data: generateData(dataCount, 10, 0.5, 5),
+                data: generateData(105, 2, 0.3, 10, 0, 100),
                 color: '#3b82f6',
                 bgAlpha: 'rgba(59, 130, 246, 0.15)',
                 yAxisID: 'y',
@@ -95,7 +105,7 @@ export const useChartStore = defineStore('chart', () => {
             },
             {
                 name: 'product strategy',
-                data: generateData(dataCount, 1000, 30, 500),
+                data: generateData(105, 2, 0.3, 10, 0, 100),
                 color: '#33BEEC',
                 bgAlpha: 'rgba(34, 211, 238, 0.15)',
                 yAxisID: 'y1',

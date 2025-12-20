@@ -1,6 +1,6 @@
 <script setup>
-import { useChartStore } from '@/stores/chart'
-import { computed } from 'vue'
+import {useChartStore} from '@/stores/chart'
+import {computed} from 'vue'
 
 const store = useChartStore()
 const chartData = computed(() => store.keywordsData)
@@ -20,18 +20,20 @@ const onToggleDataset = (index) => {
           <h4 class="text-md-lg md:text-2xl font-bold">Keywords</h4>
           <p class="text-xs md:text-md text-gray-dark font-normal">Select the keyword to see the info</p>
         </div>
-        <ChartsAreaButtons 
-          class="flex-col text-lg" 
-          :chart-data="chartData" 
-          :active-datasets="activeDatasets" 
-          @toggle="onToggleDataset"
+        <ChartsAreaButtons
+            class="flex-col text-lg"
+            :chart-data="chartData"
+            :active-datasets="activeDatasets"
+            @toggle="onToggleDataset"
         />
       </div>
-      <ChartsArea 
-        class="lg:w-8/12"
-        :chart-data="chartData" 
-        :active-datasets="activeDatasets"
-        :options="store.areaOptions" 
+      <ChartsArea
+          class="lg:w-8/12"
+          reverse-graphic
+          :scale="[0, 100]"
+          :chart-data="chartData"
+          :active-datasets="activeDatasets"
+          :options="store.areaOptions"
       />
     </div>
   </div>

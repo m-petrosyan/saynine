@@ -16,7 +16,7 @@ defineProps({
         <img :src="item.icon" alt="google">
         <p class="text-5xl md:text-6xl font-bold">{{ item.total }}</p>
       </div>
-      <ElementsRankInfo v-if="item.rank" :value="item.rank" :growth="item.growth"/>
+      <ElementsRankInfo v-if="item.rank" :value="item.rank  +' '+ item.percent" :growth="item.growth"/>
     </div>
     <div class="flex justify-between items-center mt-3">
       <div class="flex items-center gap-x-2">

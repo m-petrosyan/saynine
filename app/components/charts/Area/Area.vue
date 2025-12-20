@@ -1,3 +1,5 @@
+Вот исправленный код для реверсного графика:
+
 <script setup>
 import {computed, onMounted, onUnmounted, ref, toRefs, useTemplateRef, watch} from 'vue'
 
@@ -13,15 +15,23 @@ const props = defineProps({
   options: {
     type: Array,
     required: true
+  },
+  scale: {
+    type: [Boolean, Array],
+    default: false
+  },
+  reverseGraphic: {
+    type: Boolean,
+    default: false
   }
 })
 
-const {chartData, activeDatasets, options} = toRefs(props)
+const {chartData, activeDatasets, options, scale, reverseGraphic} = toRefs(props)
 
 const chartCanvas = ref(null)
 let chartInstance = null
 const open = ref(false)
-const selectedLabel = ref('Last 2 years')
+const selectedLabel = ref('Last 1 year')
 const target = useTemplateRef('target')
 
 let hoverX = null
@@ -55,12 +65,16 @@ const getDisplayLabels = (labels) => {
 const displayLabels = ref([])
 
 const getDataForPeriod = (value) => {
+  if (value === 'custom' || value === '5y') {
+    return {
+      labels: fullLabels.value,
+      datasets: fullDatasets.value.map(d => ({...d, data: d.data}))
+    }
+  }
+
   const now = new Date()
   let days
   switch (value) {
-    case '7d':
-      days = 7;
-      break
     case '1m':
       days = 30;
       break
@@ -70,13 +84,12 @@ const getDataForPeriod = (value) => {
     case '6m':
       days = 180;
       break
-    case '2y':
-      days = 730;
+    case '1y':
+      days = 365;
       break
     default:
-      days = 730
+      days = 365
   }
-
   const startDate = new Date(now.getTime() - days * 86400000)
   const dates = fullLabels.value.map(l => new Date(l))
   let startIndex = dates.findIndex(date => date >= startDate)
@@ -98,13 +111,68 @@ const updateChartData = (value) => {
   chartConfig.value.labels = dataForPeriod.labels
   chartConfig.value.datasets = dataForPeriod.datasets
   displayLabels.value = getDisplayLabels(dataForPeriod.labels)
+
   if (chartInstance) {
     chartInstance.data.labels = dataForPeriod.labels
+
+    let scaleMin = 0
+    let scaleMax = 100
+
+    if (Array.isArray(scale.value) && scale.value.length === 2) {
+      scaleMin = scale.value[0]
+      scaleMax = scale.value[1]
+    }
+
     dataForPeriod.datasets.forEach((ds, i) => {
       if (chartInstance.data.datasets[i]) {
-        chartInstance.data.datasets[i].data = ds.data
+        const isReverseDataset = reverseGraphic.value && chartInstance.data.datasets[i].yAxisID === 'y'
+        if (isReverseDataset) {
+          chartInstance.data.datasets[i].data = ds.data.map(v => scaleMin + scaleMax - v)
+        } else {
+          chartInstance.data.datasets[i].data = ds.data
+        }
       }
     })
+
+    const isScale = !!scale.value || reverseGraphic.value
+    chartInstance.options.scales.y.display = isScale
+    chartInstance.options.scales.y.ticks.display = isScale
+    chartInstance.options.scales.y1.display = isScale
+    chartInstance.options.scales.y1.ticks.display = isScale
+
+    let minY = 0
+    let maxY = undefined
+
+    if (reverseGraphic.value) {
+      minY = scaleMin
+      maxY = scaleMax
+      chartInstance.options.scales.y.reverse = false
+      chartInstance.options.scales.y1.display = false
+      chartInstance.options.scales.y1.ticks.display = false
+    } else if (Array.isArray(scale.value) && scale.value.length === 2) {
+      minY = scale.value[0]
+      maxY = scale.value[1]
+      chartInstance.options.scales.y.reverse = false
+    } else if (scale.value === true) {
+      let maxDataY = 0
+      chartInstance.data.datasets.forEach(ds => {
+        if (ds.yAxisID === 'y' && ds.data) {
+          const dsMax = Math.max(...ds.data)
+          if (dsMax > maxDataY) maxDataY = dsMax
+        }
+      })
+      maxY = maxDataY
+      chartInstance.options.scales.y.reverse = false
+    } else {
+      chartInstance.options.scales.y.reverse = false
+    }
+
+    chartInstance.options.scales.y.min = minY
+    chartInstance.options.scales.y.max = maxY
+
+    chartInstance.options.scales.y1.min = 0
+    chartInstance.options.scales.y1.max = undefined
+
     chartInstance.update('none')
   }
 }
@@ -138,19 +206,27 @@ const customTooltip = (context) => {
   const lines = tooltip.dataPoints.map(dp => `
     <div class="flex items-center gap-2 p-1 whitespace-nowrap">
       <span class="w-4 h-4 rounded-full" style="background:${dp.dataset.borderColor}"></span>
-      <span>${dp.dataset.label}:</span> <span style="color:${dp.dataset.borderColor}">${dp.formattedValue}</span>
+      <span class="">${dp.dataset.label}:</span> <span style="color:${dp.dataset.borderColor}">${dp.formattedValue}</span>
     </div>
   `).join('')
   tooltipEl.innerHTML = `
     <div class="mb-2">
-      <span class="text-blue-light">Start:</span><router-link to=""
+      <span class="text-blue-light">Start:</span>
       <span>${label}</span>
     </div>
     ${lines}
   `
   const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas
+  const rect = chart.canvas.getBoundingClientRect()
+  const tooltipWidth = 200
+
+  let leftPos = positionX + tooltip.caretX
+  if (leftPos + tooltipWidth > rect.width) {
+    leftPos = positionX + tooltip.caretX - tooltipWidth - 20
+  }
+
   tooltipEl.style.opacity = 1
-  tooltipEl.style.left = positionX + tooltip.caretX + 'px'
+  tooltipEl.style.left = leftPos + 'px'
   tooltipEl.style.top = positionY + tooltip.caretY + 'px'
 }
 
@@ -173,6 +249,14 @@ const handleMouseMove = (e) => {
   hoverX = mouseX
   const customDataPoints = []
   const ys = []
+
+  let scaleMin = 0
+  let scaleMax = 100
+  if (Array.isArray(scale.value) && scale.value.length === 2) {
+    scaleMin = scale.value[0]
+    scaleMax = scale.value[1]
+  }
+
   chartInstance.data.datasets.forEach((dataset, i) => {
     if (dataset.hidden) return
     const dData = dataset.data
@@ -182,6 +266,10 @@ const handleMouseMove = (e) => {
     const y1 = dData[index1]
     const y2 = dData[index2]
     const y = y1 + frac * (y2 - y1)
+
+    const isReverseDataset = reverseGraphic.value && dataset.yAxisID === 'y'
+    const originalY = isReverseDataset ? scaleMin + scaleMax - y : y
+
     const scaleY = chartInstance.scales[dataset.yAxisID || 'y']
     const pixelY = scaleY.getPixelForValue(y)
     hoverPositions[i] = {x: mouseX, y: pixelY, color: dataset.borderColor}
@@ -190,15 +278,15 @@ const handleMouseMove = (e) => {
       datasetIndex: i,
       dataset,
       index: fractionalIndex,
-      parsed: {y},
+      parsed: {y: originalY},
       label: chartInstance.data.labels[index1],
-      formattedValue: y.toLocaleString(),
+      formattedValue: originalY.toFixed(1),
       element: {x: mouseX, y: pixelY}
     }
     customDataPoints.push(dp)
   })
   if (customDataPoints.length > 0) {
-    const caretY = Math.min(...ys) - 150
+    const caretY = Math.min(...ys) - 20
     const tooltipContext = {
       chart: chartInstance,
       tooltip: {
@@ -245,7 +333,6 @@ const createCustomPointsPlugin = () => ({
 let customPointsPlugin = null
 
 onMounted(async () => {
-  updateChartData('2y')
   if (process.client && chartCanvas.value) {
     const {Chart, registerables} = await import('chart.js')
     Chart.register(...registerables)
@@ -349,7 +436,7 @@ onMounted(async () => {
             display: false,
             position: 'left',
             min: 0,
-
+            reverse: false,
             grid: {
               color: '#f1f5f9',
               drawBorder: false
@@ -363,7 +450,7 @@ onMounted(async () => {
                 size: 11
               },
               padding: 8,
-              stepSize: 2
+              stepSize: 10
             }
           },
           y1: {
@@ -371,7 +458,6 @@ onMounted(async () => {
             display: false,
             position: 'right',
             min: 0,
-
             grid: {
               drawOnChartArea: false,
               drawBorder: false
@@ -396,6 +482,8 @@ onMounted(async () => {
         }
       }
     })
+
+    updateChartData('1y')
 
     mouseMoveHandler.value = handleMouseMove
     mouseLeaveHandler.value = handleMouseLeave
@@ -422,6 +510,14 @@ watch(activeDatasets, () => {
 watch(() => chartData, () => {
   updateChartData('2y')
 }, {deep: true, immediate: true})
+
+watch(scale, () => {
+  updateChartData(selectedLabel.value.toLowerCase().replace('last ', '').replace(' years', 'y').replace(' year', 'y').replace(' months', 'm').replace(' month', 'm').replace(' weeks', 'w').replace(' week', 'w').replace(' days', 'd').replace(' day', 'd'))
+}, {deep: true})
+
+watch(reverseGraphic, () => {
+  updateChartData(selectedLabel.value.toLowerCase().replace('last ', '').replace(' years', 'y').replace(' year', 'y').replace(' months', 'm').replace(' month', 'm').replace(' weeks', 'w').replace(' week', 'w').replace(' days', 'd').replace(' day', 'd'))
+}, {deep: true})
 
 onUnmounted(() => {
   if (chartInstance) {
@@ -481,7 +577,7 @@ const openToggle = () => {
         </div>
       </div>
       <div class="p-2 py-8 lg:py-6 lg:px-10">
-        <div class="relative h-[400px] p-0 lg:px-14">
+        <div class="relative h-[400px] p-0">
           <canvas ref="chartCanvas"></canvas>
         </div>
         <div class="flex mt-2 justify-between px-0 mt-0 text-xxs lg:text-xs text-slate-600">

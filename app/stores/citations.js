@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import {defineStore} from 'pinia'
+import {ref} from 'vue'
 import googleIcon from '@/assets/icons/google.svg'
 import chatGptIcon from '@/assets/icons/chatgpt.svg'
 import perplexityIcon from '@/assets/icons/perplexity.svg'
@@ -15,6 +15,7 @@ export const useCitationsStore = defineStore('citations', () => {
             total: 545,
             pages: 402,
             rank: '1.9K',
+            percent: '-12%',
             pages_rank: '875'
         },
         {
@@ -24,6 +25,7 @@ export const useCitationsStore = defineStore('citations', () => {
             total: '1.1K',
             pages: 760,
             rank: null,
+            percent: '+8%',
             pages_rank: null
         },
         {
@@ -33,6 +35,7 @@ export const useCitationsStore = defineStore('citations', () => {
             total: '0',
             pages: 0,
             rank: null,
+            percent: '0%',
             pages_rank: null
         },
         {
@@ -42,6 +45,7 @@ export const useCitationsStore = defineStore('citations', () => {
             total: '8',
             pages: 12,
             rank: null,
+            percent: '-5%',
             pages_rank: null
         },
         {
@@ -51,6 +55,7 @@ export const useCitationsStore = defineStore('citations', () => {
             total: '155',
             pages: 92,
             rank: null,
+            percent: '+20%',
             pages_rank: null
         },
     ]);
