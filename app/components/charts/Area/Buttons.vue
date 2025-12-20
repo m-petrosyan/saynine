@@ -17,6 +17,10 @@ const emit = defineEmits(['toggle'])
 const { chartData, activeDatasets } = toRefs(props)
 
 const setActive = (index) => {
+  if (activeDatasets.value[index]) {
+    const activeCount = activeDatasets.value.filter(v => v).length
+    if (activeCount <= 1) return
+  }
   emit('toggle', index)
 }
 </script>
