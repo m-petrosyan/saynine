@@ -137,8 +137,8 @@ const updateChartData = (value) => {
     const isScale = !!scale.value || reverseGraphic.value
     chartInstance.options.scales.y.display = isScale
     chartInstance.options.scales.y.ticks.display = isScale
-    chartInstance.options.scales.y1.display = isScale
-    chartInstance.options.scales.y1.ticks.display = isScale
+    chartInstance.options.scales.y1.display = isScale && !reverseGraphic.value
+    chartInstance.options.scales.y1.ticks.display = isScale && !reverseGraphic.value
 
     let minY = 0
     let maxY = undefined
@@ -147,8 +147,8 @@ const updateChartData = (value) => {
       minY = scaleMin
       maxY = scaleMax
       chartInstance.options.scales.y.reverse = false
-      chartInstance.options.scales.y1.display = true
-      chartInstance.options.scales.y1.ticks.display = true
+      chartInstance.options.scales.y1.display = false
+      chartInstance.options.scales.y1.ticks.display = false
     } else if (Array.isArray(scale.value) && scale.value.length === 2) {
       minY = scale.value[0]
       maxY = scale.value[1]
