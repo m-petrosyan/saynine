@@ -125,7 +125,12 @@ const updateChartData = (value) => {
 
     dataForPeriod.datasets.forEach((ds, i) => {
       if (chartInstance.data.datasets[i]) {
-        chartInstance.data.datasets[i].data = ds.data
+        const isReverse = reverseGraphic.value
+        if (isReverse) {
+          chartInstance.data.datasets[i].data = ds.data.map(v => scaleMin + scaleMax - v)
+        } else {
+          chartInstance.data.datasets[i].data = ds.data
+        }
       }
     })
 
@@ -141,13 +146,13 @@ const updateChartData = (value) => {
     if (reverseGraphic.value) {
       minY = scaleMin
       maxY = scaleMax
-      chartInstance.options.scales.y.reverse = true
-      chartInstance.options.scales.y1.reverse = true
+      chartInstance.options.scales.y.reverse = false
+      chartInstance.options.scales.y1.display = true
+      chartInstance.options.scales.y1.ticks.display = true
     } else if (Array.isArray(scale.value) && scale.value.length === 2) {
       minY = scale.value[0]
       maxY = scale.value[1]
       chartInstance.options.scales.y.reverse = false
-      chartInstance.options.scales.y1.reverse = false
     } else if (scale.value === true) {
       let maxDataY = 0
       chartInstance.data.datasets.forEach(ds => {
@@ -267,8 +272,8 @@ const handleMouseMove = (e) => {
     const y2 = dData[index2]
     const y = y1 + frac * (y2 - y1)
 
-    const isReverseDataset = reverseGraphic.value && dataset.yAxisID === 'y'
-    const originalY = y
+    const isReverse = reverseGraphic.value
+    const originalY = isReverse ? scaleMin + scaleMax - y : y
 
     const scaleY = chartInstance.scales[dataset.yAxisID || 'y']
     const pixelY = scaleY.getPixelForValue(y)
@@ -352,7 +357,7 @@ onMounted(async () => {
         gradient.addColorStop(1, config.bgAlpha.replace(/0\.15/, '0.01'))
         return gradient
       },
-      fill: reverseGraphic.value ? 'end' : true,
+      fill: true,
       tension: 0,
       pointRadius: 0,
       pointHoverRadius: 0,
@@ -450,7 +455,15 @@ onMounted(async () => {
                 size: 11
               },
               padding: 8,
-              stepSize: 10
+              stepSize: 10,
+              callback: function (value) {
+                if (reverseGraphic.value) {
+                  const scaleMin = Array.isArray(scale.value) ? scale.value[0] : 0
+                  const scaleMax = Array.isArray(scale.value) ? scale.value[1] : 100
+                  return (scaleMin + scaleMax - value).toLocaleString()
+                }
+                return value.toLocaleString()
+              }
             }
           },
           y1: {
@@ -472,10 +485,17 @@ onMounted(async () => {
               },
               padding: 8,
               callback: function (value) {
-                if (value >= 1000) {
-                  return (value / 1000).toFixed(0) + 'k'
+                let displayValue = value
+                if (reverseGraphic.value) {
+                  const scaleMin = Array.isArray(scale.value) ? scale.value[0] : 0
+                  const scaleMax = Array.isArray(scale.value) ? scale.value[1] : 100
+                  displayValue = scaleMin + scaleMax - value
                 }
-                return value.toLocaleString()
+
+                if (displayValue >= 1000) {
+                  return (displayValue / 1000).toFixed(0) + 'k'
+                }
+                return displayValue.toLocaleString()
               }
             }
           }
@@ -511,13 +531,13 @@ watch(() => chartData, () => {
   updateChartData('2y')
 }, {deep: true, immediate: true})
 
-watch(scale, () => {
-  updateChartData(selectedLabel.value.toLowerCase().replace('last ', '').replace(' years', 'y').replace(' year', 'y').replace(' months', 'm').replace(' month', 'm').replace(' weeks', 'w').replace(' week', 'w').replace(' days', 'd').replace(' day', 'd'))
-}, {deep: true})
-
-watch(reverseGraphic, () => {
-  updateChartData(selectedLabel.value.toLowerCase().replace('last ', '').replace(' years', 'y').replace(' year', 'y').replace(' months', 'm').replace(' month', 'm').replace(' weeks', 'w').replace(' week', 'w').replace(' days', 'd').replace(' day', 'd'))
-}, {deep: true})
+// watch(scale, () => {
+//   updateChartData(selectedLabel.value.toLowerCase().replace('last ', '').replace(' years', 'y').replace(' year', 'y').replace(' months', 'm').replace(' month', 'm').replace(' weeks', 'w').replace(' week', 'w').replace(' days', 'd').replace(' day', 'd'))
+// }, {deep: true})
+//
+// watch(reverseGraphic, () => {
+//   updateChartData(selectedLabel.value.toLowerCase().replace('last ', '').replace(' years', 'y').replace(' year', 'y').replace(' months', 'm').replace(' month', 'm').replace(' weeks', 'w').replace(' week', 'w').replace(' days', 'd').replace(' day', 'd'))
+// }, {deep: true})
 
 onUnmounted(() => {
   if (chartInstance) {
