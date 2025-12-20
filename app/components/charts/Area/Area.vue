@@ -178,6 +178,7 @@ const updateChartData = (value) => {
       chartInstance.options.scales.y1.max = undefined
     }
 
+    chartInstance.options.layout.padding.top = 40 // dosent cut top
     chartInstance.update('none')
   }
 }
@@ -363,7 +364,8 @@ onMounted(async () => {
       pointHoverRadius: 0,
       borderWidth: 2.5,
       yAxisID: config.yAxisID,
-      hidden: !activeDatasets.value[index]
+      hidden: !activeDatasets.value[index],
+      clip: false
     }))
     chartInstance = new Chart(ctx, {
       type: 'line',
@@ -375,7 +377,7 @@ onMounted(async () => {
         responsive: true,
         maintainAspectRatio: false,
         layout: {
-          padding: {left: 0, right: 0}
+          padding: {left: 0, right: 0, top: 40, bottom: 0}
         },
         aspectRatio: 2.8,
         animation: false,

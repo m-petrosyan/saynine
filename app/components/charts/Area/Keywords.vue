@@ -30,7 +30,7 @@ const onToggleDataset = (index) => {
       <ChartsArea
           class="lg:w-8/12"
           reverse-graphic
-          :scale="[0, 100]"
+          :scale="[1, 100]"
           :chart-data="chartData"
           :active-datasets="activeDatasets"
           :options="store.areaOptions"
