@@ -125,12 +125,7 @@ const updateChartData = (value) => {
 
     dataForPeriod.datasets.forEach((ds, i) => {
       if (chartInstance.data.datasets[i]) {
-        const isReverseDataset = reverseGraphic.value && chartInstance.data.datasets[i].yAxisID === 'y'
-        if (isReverseDataset) {
-          chartInstance.data.datasets[i].data = ds.data.map(v => scaleMin + scaleMax - v)
-        } else {
-          chartInstance.data.datasets[i].data = ds.data
-        }
+        chartInstance.data.datasets[i].data = ds.data
       }
     })
 
@@ -146,13 +141,13 @@ const updateChartData = (value) => {
     if (reverseGraphic.value) {
       minY = scaleMin
       maxY = scaleMax
-      chartInstance.options.scales.y.reverse = false
-      chartInstance.options.scales.y1.display = false
-      chartInstance.options.scales.y1.ticks.display = false
+      chartInstance.options.scales.y.reverse = true
+      chartInstance.options.scales.y1.reverse = true
     } else if (Array.isArray(scale.value) && scale.value.length === 2) {
       minY = scale.value[0]
       maxY = scale.value[1]
       chartInstance.options.scales.y.reverse = false
+      chartInstance.options.scales.y1.reverse = false
     } else if (scale.value === true) {
       let maxDataY = 0
       chartInstance.data.datasets.forEach(ds => {
@@ -170,8 +165,13 @@ const updateChartData = (value) => {
     chartInstance.options.scales.y.min = minY
     chartInstance.options.scales.y.max = maxY
 
-    chartInstance.options.scales.y1.min = 0
-    chartInstance.options.scales.y1.max = undefined
+    if (reverseGraphic.value || (Array.isArray(scale.value) && scale.value.length === 2)) {
+      chartInstance.options.scales.y1.min = minY
+      chartInstance.options.scales.y1.max = maxY
+    } else {
+      chartInstance.options.scales.y1.min = 0
+      chartInstance.options.scales.y1.max = undefined
+    }
 
     chartInstance.update('none')
   }
@@ -268,7 +268,7 @@ const handleMouseMove = (e) => {
     const y = y1 + frac * (y2 - y1)
 
     const isReverseDataset = reverseGraphic.value && dataset.yAxisID === 'y'
-    const originalY = isReverseDataset ? scaleMin + scaleMax - y : y
+    const originalY = y
 
     const scaleY = chartInstance.scales[dataset.yAxisID || 'y']
     const pixelY = scaleY.getPixelForValue(y)
@@ -352,7 +352,7 @@ onMounted(async () => {
         gradient.addColorStop(1, config.bgAlpha.replace(/0\.15/, '0.01'))
         return gradient
       },
-      fill: true,
+      fill: reverseGraphic.value ? 'end' : true,
       tension: 0,
       pointRadius: 0,
       pointHoverRadius: 0,
