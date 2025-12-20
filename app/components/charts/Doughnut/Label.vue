@@ -24,7 +24,7 @@ const setHoveredIndex = (index) => {
           <p class="w-4 h-4 lg:w-5 lg:h-5 rounded-full text-white flex font-normal justify-center items-center text-xs"
              :class="{'w-5 h-5':url}"
              :style="{ backgroundColor: item.color }">
-            <span v-if="url" class="p-2">{{ item.value }}</span>
+            <span class="p-2">{{ item.value }}</span>
           </p>
           <a v-if="url" :href="item.name" target="_blank" class="text-blue-dark font-normal underline">{{
               item.name
