@@ -16,7 +16,8 @@ export const useCitationsStore = defineStore('citations', () => {
             pages: 402,
             rank: '1.9K',
             percent: '-12%',
-            pages_rank: '875'
+            pages_rank: '875',
+            growth: false
         },
         {
             id: 2,
@@ -26,7 +27,8 @@ export const useCitationsStore = defineStore('citations', () => {
             pages: 760,
             rank: null,
             percent: '+8%',
-            pages_rank: null
+            pages_rank: null,
+            growth: false
         },
         {
             id: 3,
@@ -35,8 +37,9 @@ export const useCitationsStore = defineStore('citations', () => {
             total: '0',
             pages: 0,
             rank: null,
-            percent: '0%',
-            pages_rank: null
+            percent: '1%',
+            pages_rank: null,
+            growth: true
         },
         {
             id: 4,
@@ -46,7 +49,8 @@ export const useCitationsStore = defineStore('citations', () => {
             pages: 12,
             rank: null,
             percent: '-5%',
-            pages_rank: null
+            pages_rank: null,
+            growth: false
         },
         {
             id: 5,
@@ -56,7 +60,8 @@ export const useCitationsStore = defineStore('citations', () => {
             pages: 92,
             rank: null,
             percent: '+20%',
-            pages_rank: null
+            pages_rank: null,
+            growth: false
         },
     ]);
 
