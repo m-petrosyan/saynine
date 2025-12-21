@@ -51,9 +51,28 @@ const customTooltip = (context) => {
     </div>
   `
   const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas
+  const container = chart.canvas.parentNode
+  const containerWidth = container.offsetWidth
+  const containerHeight = container.offsetHeight
+  const tooltipWidth = tooltipEl.offsetWidth
+  const tooltipHeight = tooltipEl.offsetHeight
+
+  let left = positionX + tooltip.caretX
+  let top = positionY + tooltip.caretY
+
+  // Boundary checks
+  if (left + tooltipWidth > containerWidth) {
+    left = containerWidth - tooltipWidth - 10
+  }
+  if (top + tooltipHeight > containerHeight) {
+    top = containerHeight - tooltipHeight - 10
+  }
+  if (left < 0) left = 10
+  if (top < 0) top = 10
+
   tooltipEl.style.opacity = 1
-  tooltipEl.style.left = positionX + tooltip.caretX + 'px'
-  tooltipEl.style.top = positionY + tooltip.caretY + 'px'
+  tooltipEl.style.left = left + 'px'
+  tooltipEl.style.top = top + 'px'
 }
 
 onMounted(async () => {
