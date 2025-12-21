@@ -1,9 +1,9 @@
 <script setup>
-import ChartDoughnut from "@/assets/icons/chart_doughnut.svg";
-import ChartLine from "@/assets/icons/chart_line.svg";
+import PieChart from "@/assets/icons/pie_chart.svg";
+import ChartLine from "@/assets/icons/line_chart.svg";
 
 const chartData = [
-  {title: 'DR', from: 70, to: 82, percent: '15%', growth: true, icon: ChartDoughnut},
+  {title: 'DR', from: 70, to: 82, percent: '15%', growth: true, icon: PieChart},
   {title: 'Traffic', from: '51.4K', to: '54.4K', growth: true, percent: '5%', icon: ChartLine},
 ]
 </script>

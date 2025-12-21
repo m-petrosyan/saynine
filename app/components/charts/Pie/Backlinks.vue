@@ -27,14 +27,14 @@ const data = computed(() => store.backlinksData)
     </div>
     <div
         class="max-w-[1230px] w-full flex-col-reverse lg:flex-row gap-x-20 relative mx-auto flex lg:py-14 pb-5 px-3 md:p-6 lg:px-16 justify-center items-center border-1 md:border-3 border-white-blue outline-3 md:outline-7 outline-white-100 rounded-xl">
-      <ChartsDoughnutLabel
+      <ChartsPieLabel
           :data="data"
           :hovered-index="hoveredIndex"
           @hover="hoveredIndex = $event"
           class="w-full lg:w-6/12 "
           url
       />
-      <ChartsDoughnut
+      <ChartsPie
           :data="data"
           :hovered-index="hoveredIndex"
           @hover="hoveredIndex = $event"
