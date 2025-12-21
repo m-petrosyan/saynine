@@ -1,76 +1,29 @@
-# Nuxt Minimal Starter
+### Directory structure
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+- **`app/`**: Core logic and UI.
+    - **`assets/`**: Static files.
+        - **`css/main.css`**: Tailwind 4 theme & variables.
+    - **`components/`**: Reusable components.
+        - **`charts/`**: Chart.js components.
+        - **`elements/`**: General UI elements.
+    - **`pages/`**: App routes (pages).
+    - **`stores/`**: Pinia state.
+- **`public/`**: Public static assets.
+- **`plugins/`**: Plugins.
 
-## Setup
+### Getting Started
 
-Make sure to install dependencies:
+1. **Install**:
+   ```bash
+   npm install
+   ```
 
-```bash
-# npm
-npm install
+2. **Run**:
+   ```bash
+   npm run dev
+   ```
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-# saynine
+3. **Build**:
+   ```bash
+   npm run build
+   ```
