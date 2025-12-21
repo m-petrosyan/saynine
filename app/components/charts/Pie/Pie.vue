@@ -12,6 +12,7 @@ const emit = defineEmits(['hover'])
 const canvas = ref(null)
 let instance = null
 
+// Utility to add transparency to a color string (HEX or RGB)
 const addOpacity = (color, opacity = 0.3) => {
   if (color.startsWith('#')) {
     return color + Math.floor(opacity * 255).toString(16).padStart(2, '0')
@@ -19,6 +20,7 @@ const addOpacity = (color, opacity = 0.3) => {
   return color.replace(')', `, ${opacity})`).replace('rgb', 'rgba')
 }
 
+// Renders a custom floating tooltip for the doughnut/pie chart
 const customTooltip = (context) => {
   const {chart, tooltip} = context
   let tooltipEl = chart.canvas.parentNode.querySelector('.chartjs-tooltip')
@@ -108,10 +110,12 @@ onMounted(async () => {
           }
         },
         animation: {animateRotate: true, duration: 2000},
+        // Handles internal chart hover to highlight slices and notify parent
         onHover: (event, elements, chart) => {
           if (elements.length > 0) {
             const hoveredIndex = elements[0].index
             emit('hover', hoveredIndex)
+            // Dim other slices while hovering
             const newColors = originalColors.map((color, i) => i === hoveredIndex ? color : addOpacity(color, 0.3))
             chart.data.datasets[0].backgroundColor = newColors
             chart.update('none')
@@ -121,6 +125,7 @@ onMounted(async () => {
             chart.update('none')
           }
         },
+        // Handles mouse leaving the entire chart area
         onLeave: (event, elements, chart) => {
           emit('hover', -1)
           chart.data.datasets[0].backgroundColor = originalColors
@@ -129,6 +134,7 @@ onMounted(async () => {
       }
     })
 
+    // Synchronizes highlighting when parent component triggers hover via props
     watch(() => props.hoveredIndex, (index) => {
       if (instance) {
         if (index >= 0) {

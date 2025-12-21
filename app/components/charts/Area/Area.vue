@@ -48,6 +48,7 @@ const chartConfig = ref({
   datasets: []
 })
 
+// Calculates which labels to show on the X-axis based on screen size
 const getDisplayLabels = (labels) => {
   const isMobile = window?.innerWidth < 768
   const maxLabels = isMobile ? 4 : 8
@@ -64,32 +65,27 @@ const getDisplayLabels = (labels) => {
 
 const displayLabels = ref([])
 
+// Filters and returns data for the selected time period (1m, 3m, etc.)
 const getDataForPeriod = (value) => {
-  if (value === 'custom' || value === '5y') {
-    return {
-      labels: fullLabels.value,
-      datasets: fullDatasets.value.map(d => ({...d, data: d.data}))
-    }
-  }
-
   const now = new Date()
   let days
   switch (value) {
     case '1m':
-      days = 30;
+      days = 30
       break
     case '3m':
-      days = 90;
+      days = 90
       break
     case '6m':
-      days = 180;
+      days = 180
       break
     case '1y':
-      days = 365;
+      days = 365
       break
     default:
       days = 365
   }
+
   const startDate = new Date(now.getTime() - days * 86400000)
   const dates = fullLabels.value.map(l => new Date(l))
   let startIndex = dates.findIndex(date => date >= startDate)
@@ -98,14 +94,17 @@ const getDataForPeriod = (value) => {
   if (fullLabels.value.length - startIndex < 2) {
     startIndex = Math.max(0, fullLabels.value.length - 2)
   }
-  const slicedLabels = fullLabels.value.slice(startIndex)
-  const slicedDatasets = fullDatasets.value.map(d => ({
+
+  const labels = fullLabels.value.slice(startIndex)
+  const datasets = fullDatasets.value.map(d => ({
     ...d,
     data: d.data.slice(startIndex)
   }))
-  return {labels: slicedLabels, datasets: slicedDatasets}
+
+  return {labels, datasets}
 }
 
+// Updates chart instance with new data and adjusts Y-scales
 const updateChartData = (value) => {
   const dataForPeriod = getDataForPeriod(value)
   chartConfig.value.labels = dataForPeriod.labels
@@ -127,6 +126,7 @@ const updateChartData = (value) => {
       if (chartInstance.data.datasets[i]) {
         const isReverse = reverseGraphic.value
         if (isReverse) {
+          // Flip data values for reversed charts
           chartInstance.data.datasets[i].data = ds.data.map(v => scaleMin + scaleMax - v)
         } else {
           chartInstance.data.datasets[i].data = ds.data
@@ -143,6 +143,7 @@ const updateChartData = (value) => {
     let minY = 0
     let maxY = undefined
 
+    // Determine scale boundaries and reverse logic
     if (reverseGraphic.value) {
       minY = scaleMin
       maxY = scaleMax
@@ -178,11 +179,12 @@ const updateChartData = (value) => {
       chartInstance.options.scales.y1.max = undefined
     }
 
-    chartInstance.options.layout.padding.top = 40 // dosent cut top
+    chartInstance.options.layout.padding.top = 40 // Prevent clipping at the top
     chartInstance.update('none')
   }
 }
 
+// Renders a custom floating tooltip near the cursor
 const customTooltip = (context) => {
   const {chart, tooltip} = context
   let tooltipEl = chart.canvas.parentNode.querySelector('.chartjs-tooltip')
@@ -226,6 +228,7 @@ const customTooltip = (context) => {
   const rect = chart.canvas.getBoundingClientRect()
   const tooltipWidth = 200
 
+  // Position tooltip horizontally with boundary check
   let leftPos = positionX + tooltip.caretX
   if (leftPos + tooltipWidth > rect.width) {
     leftPos = positionX + tooltip.caretX - tooltipWidth - 20
@@ -236,6 +239,7 @@ const customTooltip = (context) => {
   tooltipEl.style.top = positionY + tooltip.caretY - 120 + 'px'
 }
 
+// Custom mouse controller to handle interpolation between data points
 const handleMouseMove = (e) => {
   if (!chartInstance) return
   const rect = chartCanvas.value.getBoundingClientRect()
@@ -271,6 +275,8 @@ const handleMouseMove = (e) => {
     const frac = fractionalIndex - index1
     const y1 = dData[index1]
     const y2 = dData[index2]
+
+    // Linear interpolation for smooth hover effects
     const y = y1 + frac * (y2 - y1)
 
     const isReverse = reverseGraphic.value
@@ -530,7 +536,7 @@ watch(activeDatasets, () => {
 }, {deep: true})
 
 watch(() => chartData, () => {
-  updateChartData('2y')
+  updateChartData('1y')
 }, {deep: true, immediate: true})
 
 // watch(scale, () => {
