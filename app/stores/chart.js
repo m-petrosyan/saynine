@@ -1,5 +1,5 @@
-import {defineStore} from 'pinia'
-import {ref} from 'vue'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import Backlink from "@/assets/icons/backlink.svg";
 import Average from "@/assets/icons/average.svg";
 import Domain from "@/assets/icons/domain.svg";
@@ -38,10 +38,10 @@ export const useChartStore = defineStore('chart', () => {
     const generateDates = () => {
         const dates = [];
         const today = new Date();
-        for (let i = 104; i >= 0; i--) {
+        for (let i = 730; i >= 0; i--) {
             const date = new Date(today);
-            date.setDate(today.getDate() - (i * 7));
-            dates.push(date.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'}));
+            date.setDate(today.getDate() - i);
+            dates.push(date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }));
         }
         return dates;
     };
@@ -96,7 +96,7 @@ export const useChartStore = defineStore('chart', () => {
         datasets: [
             {
                 name: 'product strategy',
-                data: generateData(105, 2, 0.3, 10, 0, 100),
+                data: generateData(dataCount, 2, 0.3, 10, 0, 100),
                 color: '#3b82f6',
                 bgAlpha: 'rgba(59, 130, 246, 0.15)',
                 yAxisID: 'y',
@@ -105,7 +105,7 @@ export const useChartStore = defineStore('chart', () => {
             },
             {
                 name: 'product strategy',
-                data: generateData(105, 2, 0.3, 10, 0, 100),
+                data: generateData(dataCount, 2, 0.3, 10, 0, 100),
                 color: '#33BEEC',
                 bgAlpha: 'rgba(34, 211, 238, 0.15)',
                 yAxisID: 'y1',
@@ -177,10 +177,10 @@ export const useChartStore = defineStore('chart', () => {
     };
 
     const areaOptions = ref([
-        {label: 'Last month', value: '1m'},
-        {label: 'Last 3 months', value: '3m'},
-        {label: 'Last 6 months', value: '6m'},
-        {label: 'Last 1 year', value: '1y'},
+        { label: 'Last month', value: '1m' },
+        { label: 'Last 3 months', value: '3m' },
+        { label: 'Last 6 months', value: '6m' },
+        { label: 'Last 1 year', value: '1y' },
     ]);
 
     return {

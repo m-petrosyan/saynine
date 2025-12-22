@@ -23,10 +23,14 @@ const props = defineProps({
   reverseGraphic: {
     type: Boolean,
     default: false
+  },
+  enableSampling: {
+    type: Boolean,
+    default: true
   }
 })
 
-const {chartData, activeDatasets, options, scale, reverseGraphic} = toRefs(props)
+const {chartData, activeDatasets, options, scale, reverseGraphic, enableSampling} = toRefs(props)
 
 const chartCanvas = ref(null)
 let chartInstance = null
@@ -66,24 +70,33 @@ const getDisplayLabels = (labels) => {
 const displayLabels = ref([])
 
 // Filters and returns data for the selected time period (1m, 3m, etc.)
+// If enableSampling is true, it reduces the number of points for better readability.
 const getDataForPeriod = (value) => {
   const now = new Date()
   let days
+  let targetDayStep = 1
+
+  // Define how many days should ideally be between points for each period
   switch (value) {
     case '1m':
       days = 30
+      targetDayStep = 5
       break
     case '3m':
       days = 90
+      targetDayStep = 12
       break
     case '6m':
       days = 180
+      targetDayStep = 22
       break
     case '1y':
       days = 365
+      targetDayStep = 45
       break
     default:
       days = 365
+      targetDayStep = 45
   }
 
   const startDate = new Date(now.getTime() - days * 86400000)
@@ -91,17 +104,54 @@ const getDataForPeriod = (value) => {
   let startIndex = dates.findIndex(date => date >= startDate)
   if (startIndex === -1) startIndex = 0
 
+  // Ensure at least 2 points for the chart to render
   if (fullLabels.value.length - startIndex < 2) {
     startIndex = Math.max(0, fullLabels.value.length - 2)
   }
 
-  const labels = fullLabels.value.slice(startIndex)
-  const datasets = fullDatasets.value.map(d => ({
+  const rawLabels = fullLabels.value.slice(startIndex)
+  const rawDatasets = fullDatasets.value.map(d => ({
     ...d,
     data: d.data.slice(startIndex)
   }))
 
-  return {labels, datasets}
+  if (!enableSampling.value) {
+    return {labels: rawLabels, datasets: rawDatasets}
+  }
+
+  // Calculate index step based on data density (e.g., daily vs weekly)
+  // This ensures roughly the same number of points regardless of incoming data frequency
+  let indexStep = 1
+  if (rawLabels.length > 1) {
+    const d1 = new Date(rawLabels[0])
+    const d2 = new Date(rawLabels[1])
+    const diffDays = Math.abs(d2 - d1) / (1000 * 60 * 60 * 24)
+    if (diffDays > 0) {
+      // indexStep = targetDayStep / actualDaysBetweenDataPoints
+      indexStep = Math.max(1, Math.round(targetDayStep / diffDays))
+    }
+  }
+
+  const sampledLabels = []
+  const sampledDatasets = rawDatasets.map(d => ({...d, data: []}))
+
+  // Fill sampled arrays using the calculated index step
+  for (let i = 0; i < rawLabels.length; i += indexStep) {
+    sampledLabels.push(rawLabels[i])
+    rawDatasets.forEach((d, dsIndex) => {
+      sampledDatasets[dsIndex].data.push(d.data[i])
+    })
+  }
+
+  // Always include the very last data point to show current state
+  if (rawLabels.length > 0 && (rawLabels.length - 1) % indexStep !== 0) {
+    sampledLabels.push(rawLabels[rawLabels.length - 1])
+    rawDatasets.forEach((d, dsIndex) => {
+      sampledDatasets[dsIndex].data.push(d.data[rawLabels.length - 1])
+    })
+  }
+
+  return {labels: sampledLabels, datasets: sampledDatasets}
 }
 
 // Updates chart instance with new data and adjusts Y-scales
