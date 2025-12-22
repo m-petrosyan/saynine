@@ -1,5 +1,3 @@
-Вот исправленный код для реверсного графика:
-
 <script setup>
 import {computed, onMounted, onUnmounted, ref, toRefs, useTemplateRef, watch} from 'vue'
 
@@ -212,7 +210,7 @@ const updateChartData = (value) => {
           if (dsMax > maxDataY) maxDataY = dsMax
         }
       })
-      maxY = maxDataY
+      maxY = maxDataY * 1.05 // Add 5% buffer to avoid clipping at the top
       chartInstance.options.scales.y.reverse = false
     } else {
       chartInstance.options.scales.y.reverse = false
@@ -296,23 +294,23 @@ const handleMouseMove = (e) => {
   if (!chartInstance) return
   const rect = chartCanvas.value.getBoundingClientRect()
   const mouseX = e.clientX - rect.left
-  
+
   const chartArea = chartInstance.chartArea
   const scaleX = chartInstance.scales.x
   const dataLength = chartInstance.data.labels.length
-  
+
   // Calculate a continuous fractional index based on mouse position within chart area
   // This ensures smooth movement regardless of whether the scale is snapping to integers
   const decimal = (mouseX - chartArea.left) / chartArea.width
   fractionalIndex = decimal * (dataLength - 1)
-  
+
   if (fractionalIndex < 0 || fractionalIndex > dataLength - 1) {
     if (hoverX !== null) {
       handleMouseLeave()
     }
     return
   }
-  
+
   hoverX = mouseX
   const customDataPoints = []
   const ys = []
@@ -433,7 +431,7 @@ onMounted(async () => {
       borderWidth: 2.5,
       yAxisID: config.yAxisID,
       hidden: !activeDatasets.value[index],
-      clip: true
+      clip: false // Combined with manual clipping in plugin for better control
     }))
     chartInstance = new Chart(ctx, {
       type: 'line',
@@ -512,6 +510,7 @@ onMounted(async () => {
             position: 'left',
             min: 0,
             reverse: false,
+            grace: '5%', // Add scale grace
             grid: {
               color: '#f1f5f9',
               drawBorder: false
@@ -541,6 +540,7 @@ onMounted(async () => {
             display: false,
             position: 'right',
             min: 0,
+            grace: '5%',
             grid: {
               drawOnChartArea: false,
               drawBorder: false
