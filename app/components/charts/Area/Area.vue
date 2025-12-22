@@ -379,9 +379,14 @@ const createCustomPointsPlugin = () => ({
   id: 'customPoints_' + Math.random().toString(36).substr(2, 9),
   afterDatasetsDraw: (chart) => {
     if (!hoverX) return
-    const ctx = chart.ctx
+    const {ctx, chartArea} = chart
+    ctx.save()
+    // Clip drawing to chart area to avoid overlapping with scales
+    ctx.beginPath()
+    ctx.rect(chartArea.left, chartArea.top - 10, chartArea.width, chartArea.bottom - chartArea.top + 20)
+    ctx.clip()
+
     Object.values(hoverPositions).forEach(({x, y, color}) => {
-      ctx.save()
       ctx.beginPath()
       ctx.arc(x, y, 8, 0, 2 * Math.PI)
       ctx.fillStyle = color
@@ -389,8 +394,8 @@ const createCustomPointsPlugin = () => ({
       ctx.strokeStyle = 'white'
       ctx.lineWidth = 3
       ctx.stroke()
-      ctx.restore()
     })
+    ctx.restore()
   }
 })
 
@@ -423,7 +428,7 @@ onMounted(async () => {
       borderWidth: 2.5,
       yAxisID: config.yAxisID,
       hidden: !activeDatasets.value[index],
-      clip: false
+      clip: true
     }))
     chartInstance = new Chart(ctx, {
       type: 'line',
