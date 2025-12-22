@@ -195,7 +195,7 @@ const customTooltip = (context) => {
       position: absolute;
       background: white;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 12px 16px;
       pointer-events: none;
       font-size: 14px;
@@ -203,6 +203,7 @@ const customTooltip = (context) => {
       color: #0f172a;
       transition: all .1s ease;
       z-index: 100;
+      box-shadow: 0px 3px 8px 4px #09326814;
     `
     chart.canvas.parentNode.appendChild(tooltipEl)
   }
@@ -219,7 +220,8 @@ const customTooltip = (context) => {
   `).join('')
   tooltipEl.innerHTML = `
     <div class="mb-2">
-      <span class="text-blue-light">Start:</span>
+     <div class="mb-2">
+        ${!reverseGraphic.value ? `<span class="text-blue-light">Start:</span>` : ''}
       <span>${label}</span>
     </div>
     ${lines}

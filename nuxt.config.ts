@@ -18,5 +18,10 @@ export default defineNuxtConfig({
     },
     build: {
         transpile: ['vue-chartjs', 'chart.js']
-    }
+    },
+    vite: {
+        server: {
+            allowedHosts: ['.ngrok-free.app'],
+        },
+    },
 })

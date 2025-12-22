@@ -14,7 +14,7 @@ const setHoveredIndex = (index) => {
 
 <template>
   <div class="font-inter flex justify-center flex-col mt-4">
-    <div class="flex flex-col gap-y-1">
+    <div class="flex flex-col">
       <div v-for="(item, i) in props.data" :key="i"
            @mouseenter="setHoveredIndex(i)"
            @mouseleave="setHoveredIndex(-1)"
