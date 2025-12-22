@@ -134,14 +134,27 @@ onMounted(async () => {
       }
     })
 
-    // Synchronizes highlighting when parent component triggers hover via props
+    // Synchronizes highlighting and tooltip when parent component triggers hover via props
     watch(() => props.hoveredIndex, (index) => {
       if (instance) {
         if (index >= 0) {
+          // Highlight the segment
           const newColors = originalColors.map((color, i) => i === index ? color : addOpacity(color, 0.3))
           instance.data.datasets[0].backgroundColor = newColors
+          
+          // Show the tooltip programmatically
+          instance.tooltip.setActiveElements([
+            {
+              datasetIndex: 0,
+              index: index,
+            }
+          ])
         } else {
+          // Reset segment colors
           instance.data.datasets[0].backgroundColor = originalColors
+          
+          // Hide the tooltip
+          instance.tooltip.setActiveElements([])
         }
         instance.update('none')
       }
