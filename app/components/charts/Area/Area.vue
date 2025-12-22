@@ -296,18 +296,23 @@ const handleMouseMove = (e) => {
   if (!chartInstance) return
   const rect = chartCanvas.value.getBoundingClientRect()
   const mouseX = e.clientX - rect.left
+  
+  const chartArea = chartInstance.chartArea
   const scaleX = chartInstance.scales.x
-  fractionalIndex = scaleX.getValueForPixel(mouseX)
   const dataLength = chartInstance.data.labels.length
+  
+  // Calculate a continuous fractional index based on mouse position within chart area
+  // This ensures smooth movement regardless of whether the scale is snapping to integers
+  const decimal = (mouseX - chartArea.left) / chartArea.width
+  fractionalIndex = decimal * (dataLength - 1)
+  
   if (fractionalIndex < 0 || fractionalIndex > dataLength - 1) {
     if (hoverX !== null) {
-      hoverX = null
-      hoverPositions = {}
-      customTooltip({chart: chartInstance, tooltip: {opacity: 0}})
-      chartInstance.draw()
+      handleMouseLeave()
     }
     return
   }
+  
   hoverX = mouseX
   const customDataPoints = []
   const ys = []
