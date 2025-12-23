@@ -67,7 +67,7 @@ const getDisplayLabels = (labels) => {
 
 const displayLabels = ref([])
 
-// Filters and returns data for the selected time period (1m, 3m, etc.)
+// Filters and returns data for the selected time period
 // If enableSampling is true, it reduces the number of points for better readability.
 const getDataForPeriod = (value) => {
   const now = new Date()
@@ -378,6 +378,7 @@ const handleMouseLeave = () => {
   }
 }
 
+// points at hover positions
 const createCustomPointsPlugin = () => ({
   id: 'customPoints_' + Math.random().toString(36).substr(2, 9),
   afterDatasetsDraw: (chart) => {
@@ -428,7 +429,7 @@ onMounted(async () => {
       tension: 0,
       pointRadius: 0,
       pointHoverRadius: 0,
-      borderWidth: 2.5,
+      borderWidth: 3,
       yAxisID: config.yAxisID,
       hidden: !activeDatasets.value[index],
       clip: false // Combined with manual clipping in plugin for better control
