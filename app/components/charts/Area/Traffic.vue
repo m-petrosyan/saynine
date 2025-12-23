@@ -23,7 +23,7 @@ const onToggleDataset = (index) => {
             @toggle="onToggleDataset"
         />
         <ChartsArea
-            scale
+            :scale="[0, 100]"
             :chart-data="chartData"
             :active-datasets="activeDatasets"
             :options="store.areaOptions"

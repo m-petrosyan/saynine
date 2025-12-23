@@ -171,13 +171,16 @@ const updateChartData = (value) => {
     }
 
     dataForPeriod.datasets.forEach((ds, i) => {
-      if (chartInstance.data.datasets[i]) {
+      const chartDataset = chartInstance.data.datasets[i]
+      if (chartDataset) {
         const isReverse = reverseGraphic.value
-        if (isReverse) {
+        const isLeftAxis = chartDataset.yAxisID !== 'y1'
+        // In reverse mode, all datasets share the primary scale logic because the right axis is hidden
+        if (isReverse && (isLeftAxis || reverseGraphic.value)) {
           // Flip data values for reversed charts
-          chartInstance.data.datasets[i].data = ds.data.map(v => scaleMin + scaleMax - v)
+          chartDataset.data = ds.data.map(v => scaleMin + scaleMax - v)
         } else {
-          chartInstance.data.datasets[i].data = ds.data
+          chartDataset.data = ds.data
         }
       }
     })
@@ -219,7 +222,9 @@ const updateChartData = (value) => {
     chartInstance.options.scales.y.min = minY
     chartInstance.options.scales.y.max = maxY
 
-    if (reverseGraphic.value || (Array.isArray(scale.value) && scale.value.length === 2)) {
+    // Match y1 to y ONLY in reverseGraphic mode
+    // Otherwise, y1 stays at 0..auto for independent scaling (e.g. Traffic vs DR)
+    if (reverseGraphic.value) {
       chartInstance.options.scales.y1.min = minY
       chartInstance.options.scales.y1.max = maxY
     } else {
@@ -335,7 +340,8 @@ const handleMouseMove = (e) => {
     const y = y1 + frac * (y2 - y1)
 
     const isReverse = reverseGraphic.value
-    const originalY = isReverse ? scaleMin + scaleMax - y : y
+    const isLeftAxis = dataset.yAxisID !== 'y1'
+    const originalY = (isReverse && (isLeftAxis || reverseGraphic.value)) ? scaleMin + scaleMax - y : y
 
     const scaleY = chartInstance.scales[dataset.yAxisID || 'y']
     const pixelY = scaleY.getPixelForValue(y)
