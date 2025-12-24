@@ -330,18 +330,31 @@ const handleMouseMove = (e) => {
   chartInstance.data.datasets.forEach((dataset, i) => {
     if (dataset.hidden) return
     const dData = dataset.data
-    // Snap to the nearest real data index instead of interpolating
+    const index1 = Math.floor(fractionalIndex)
+    const index2 = Math.min(index1 + 1, dData.length - 1)
+    const frac = fractionalIndex - index1
+    const y1 = dData[index1]
+    const y2 = dData[index2]
+
+    // Linear interpolation for smooth visual point movement
+    const yLerp = y1 + frac * (y2 - y1)
+    
+    // Snapping for discrete data in the tooltip
     const snapIndex = Math.round(fractionalIndex)
-    const y = dData[snapIndex]
+    const ySnap = dData[snapIndex]
 
     const isReverse = reverseGraphic.value
     const isLeftAxis = dataset.yAxisID !== 'y1'
-    const originalY = (isReverse && (isLeftAxis || reverseGraphic.value)) ? scaleMin + scaleMax - y : y
+    
+    // We use interpolated Y for position, but snapped Y for the displayed value
+    const originalY = (isReverse && (isLeftAxis || reverseGraphic.value)) ? scaleMin + scaleMax - ySnap : ySnap
 
     const scaleY = chartInstance.scales[dataset.yAxisID || 'y']
-    const pixelY = scaleY.getPixelForValue(y)
+    const pixelY = scaleY.getPixelForValue(yLerp) // Point follows the line smoothly
+    
     hoverPositions[i] = {x: mouseX, y: pixelY, color: dataset.borderColor}
     ys.push(pixelY)
+    
     const dp = {
       datasetIndex: i,
       dataset,
