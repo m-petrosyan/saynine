@@ -74,14 +74,14 @@ export const useChartStore = defineStore('chart', () => {
         datasets: [
             {
                 name: 'Domain Rating',
-                data: generateData(dataCount, 40, 0.1, 2, 0, 100),
+                data: generateData(dataCount, 2, 0.3, 15, 0, 100),
                 color: '#3b82f6',
                 bgAlpha: 'rgba(59, 130, 246, 0.15)',
                 yAxisID: 'y'
             },
             {
                 name: 'Organic traffic',
-                data: generateData(dataCount, 2000, 20, 300),
+                data: generateData(dataCount, 2, 0.3, 15, 0, 100),
                 color: '#33BEEC',
                 bgAlpha: 'rgba(34, 211, 238, 0.15)',
                 yAxisID: 'y1'

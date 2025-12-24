@@ -330,14 +330,9 @@ const handleMouseMove = (e) => {
   chartInstance.data.datasets.forEach((dataset, i) => {
     if (dataset.hidden) return
     const dData = dataset.data
-    const index1 = Math.floor(fractionalIndex)
-    const index2 = Math.min(index1 + 1, dData.length - 1)
-    const frac = fractionalIndex - index1
-    const y1 = dData[index1]
-    const y2 = dData[index2]
-
-    // Linear interpolation for smooth hover effects
-    const y = y1 + frac * (y2 - y1)
+    // Snap to the nearest real data index instead of interpolating
+    const snapIndex = Math.round(fractionalIndex)
+    const y = dData[snapIndex]
 
     const isReverse = reverseGraphic.value
     const isLeftAxis = dataset.yAxisID !== 'y1'
@@ -350,9 +345,9 @@ const handleMouseMove = (e) => {
     const dp = {
       datasetIndex: i,
       dataset,
-      index: fractionalIndex,
+      index: snapIndex,
       parsed: {y: originalY},
-      label: chartInstance.data.labels[index1],
+      label: chartInstance.data.labels[snapIndex],
       formattedValue: originalY.toFixed(1),
       element: {x: mouseX, y: pixelY}
     }
